@@ -1,0 +1,12 @@
+*.iml
+.gradle
+/local.properties
+/.idea
+.DS_Store
+/build
+/app/build
+/captures
+.externalNativeBuild
+.cxx
+# NOTA: la rúbrica exige subir el .jks y su configuración al repositorio,
+# por eso keystore.properties y keystore/*.jks NO están ignorados.

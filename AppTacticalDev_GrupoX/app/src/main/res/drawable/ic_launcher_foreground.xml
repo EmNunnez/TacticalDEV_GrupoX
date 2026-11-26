@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Ícono: copo de nieve + marcador de ubicación (vector simple) -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M54,28c-9.4,0 -17,7.6 -17,17c0,12.7 17,31 17,31s17,-18.3 17,-31c0,-9.4 -7.6,-17 -17,-17zM54,52a7,7 0,1 1,0 -14a7,7 0,1 1,0 14z" />
+    <path
+        android:fillColor="#7FD3FF"
+        android:pathData="M53,40h2v10h-2zM49,44h10v2h-10z" />
+</vector>

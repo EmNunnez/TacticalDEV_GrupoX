@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- MVP: los microservicios corren por HTTP (PC local o EC2 sin certificado).
+     En producción se debe usar HTTPS y eliminar el tráfico en texto plano. -->
+<network-security-config>
+    <base-config cleartextTrafficPermitted="true" />
+</network-security-config>
