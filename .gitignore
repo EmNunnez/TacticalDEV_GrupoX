@@ -1,0 +1,16 @@
+# Android
+**/.gradle/
+**/build/
+**/local.properties
+**/.kotlin/
+*.apk.idsig
+# Backend (Maven)
+tacticaldev-backend/target/
+# IDE
+**/.idea/
+*.iml
+.DS_Store
+# NUNCA subir la llave de AWS
+*.pem
+# Nota: el .jks y keystore.properties SÍ se suben (lo exige la rúbrica)
+# y apk/app-release.apk también.
