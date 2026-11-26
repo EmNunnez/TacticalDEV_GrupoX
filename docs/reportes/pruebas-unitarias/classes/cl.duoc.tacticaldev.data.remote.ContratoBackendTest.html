@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="x-ua-compatible" content="IE=edge"/>
+<title>Test results - Class cl.duoc.tacticaldev.data.remote.ContratoBackendTest</title>
+<link href="../css/base-style.css" rel="stylesheet" type="text/css"/>
+<link href="../css/style.css" rel="stylesheet" type="text/css"/>
+<script src="../js/report.js" type="text/javascript"></script>
+</head>
+<body>
+<div id="content">
+<h1>Class cl.duoc.tacticaldev.data.remote.ContratoBackendTest</h1>
+<div class="breadcrumbs">
+<a href="../index.html">all</a> &gt; 
+<a href="../packages/cl.duoc.tacticaldev.data.remote.html">cl.duoc.tacticaldev.data.remote</a> &gt; ContratoBackendTest</div>
+<div id="summary">
+<table>
+<tr>
+<td>
+<div class="summaryGroup">
+<table>
+<tr>
+<td>
+<div class="infoBox" id="tests">
+<div class="counter">8</div>
+<p>tests</p>
+</div>
+</td>
+<td>
+<div class="infoBox" id="failures">
+<div class="counter">0</div>
+<p>failures</p>
+</div>
+</td>
+<td>
+<div class="infoBox" id="ignored">
+<div class="counter">0</div>
+<p>ignored</p>
+</div>
+</td>
+<td>
+<div class="infoBox" id="duration">
+<div class="counter">1.927s</div>
+<p>duration</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</td>
+<td>
+<div class="infoBox success" id="successRate">
+<div class="percent">100%</div>
+<p>successful</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div id="tabs">
+<ul class="tabLinks">
+<li>
+<a href="#tab0">Tests</a>
+</li>
+<li>
+<a href="#tab1">Standard error</a>
+</li>
+</ul>
+<div id="tab0" class="tab">
+<h2>Tests</h2>
+<table>
+<thead>
+<tr>
+<th>Test</th>
+<th>Duration</th>
+<th>Result</th>
+</tr>
+</thead>
+<tr>
+<td class="success">API externa Open-Meteo: parámetros y JSON</td>
+<td class="success">0.039s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">RetrofitInstance apunta al backend de la nube</td>
+<td class="success">0.002s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">errores del backend llegan al usuario como mensaje legible</td>
+<td class="success">0.178s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">ms operaciones: puntos de venta y equipos</td>
+<td class="success">0.170s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">ms operaciones: solicitudes</td>
+<td class="success">0.109s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">ms operaciones: visitas con foto + GPS y validación</td>
+<td class="success">0.086s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">ms usuarios: login, registro y CRUD de usuarios</td>
+<td class="success">1.262s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">repositorio + Retrofit real: el login guarda la sesión</td>
+<td class="success">0.081s</td>
+<td class="success">passed</td>
+</tr>
+</table>
+</div>
+<div id="tab1" class="tab">
+<h2>Standard error</h2>
+<span class="code">
+<pre>nov. 26, 2026 1:05:43 A. M. okhttp3.internal.platform.Platform log
+INFORMACIÓN: --&gt; POST http://localhost:52586/api/auth/login (57-byte body)
+nov. 26, 2026 1:05:44 A. M. okhttp3.internal.platform.Platform log
+INFORMACIÓN: &lt;-- 200 OK http://localhost:52586/api/auth/login (218ms, 150-byte body)
+nov. 26, 2026 1:05:44 A. M. okhttp3.internal.platform.Platform log
+INFORMACIÓN: --&gt; POST http://localhost:52586/api/auth/registro (99-byte body)
+nov. 26, 2026 1:05:44 A. M. okhttp3.internal.platform.Platform log
+INFORMACIÓN: &lt;-- 201 OK http://localhost:52586/api/auth/registro (4ms, 117-byte body)
+nov. 26, 2026 1:05:44 A. M. okhttp3.internal.platform.Platform log
+INFORMACIÓN: --&gt; GET http://localhost:52586/api/usuarios?rol=OPERARIO
+nov. 26, 2026 1:05:44 A. M. okhttp3.internal.platform.Platform log
+INFORMACIÓN: &lt;-- 200 OK http://localhost:52586/api/usuarios?rol=OPERARIO (3ms, 475-byte body)
+nov. 26, 2026 1:05:44 A. M. okhttp3.internal.platform.Platform log
+INFORMACIÓN: --&gt; GET http://localhost:52586/api/usuarios
+nov. 26, 2026 1:05:44 A. M. okhttp3.internal.platform.Platform log
+INFORMACIÓN: &lt;-- 200 OK http://localhost:52586/api/usuarios (4ms, 2-byte body)
+nov. 26, 2026 1:05:44 A. M. okhttp3.internal.platform.Platform log
+INFORMACIÓN: --&gt; GET http://localhost:52586/api/usuarios/2
+nov. 26, 2026 1:05:44 A. M. okhttp3.internal.platform.Platform log
+INFORMACIÓN: &lt;-- 200 OK http://localhost:52586/api/usuarios/2 (4ms, 150-byte body)
+nov. 26, 2026 1:05:44 A. M. okhttp3.internal.platform.Platform log
+INFORMACIÓN: --&gt; POST http://localhost:52586/api/usuarios (141-byte body)
+nov. 26, 2026 1:05:44 A. M. okhttp3.internal.platform.Platform log
+INFORMACIÓN: &lt;-- 201 OK http://localhost:52586/api/usuarios (5ms, 150-byte body)
+nov. 26, 2026 1:05:44 A. M. okhttp3.internal.platform.Platform log
+INFORMACIÓN: --&gt; PUT http://localhost:52586/api/usuarios/2 (141-byte body)
+nov. 26, 2026 1:05:44 A. M. okhttp3.internal.platform.Platform log
+INFORMACIÓN: &lt;-- 200 OK http://localhost:52586/api/usuarios/2 (5ms, 150-byte body)
+nov. 26, 2026 1:05:44 A. M. okhttp3.internal.platform.Platform log
+INFORMACIÓN: --&gt; DELETE http://localhost:52586/api/usuarios/2
+nov. 26, 2026 1:05:44 A. M. okhttp3.internal.platform.Platform log
+INFORMACIÓN: &lt;-- 204 OK http://localhost:52586/api/usuarios/2 (4ms, 0-byte body)
+nov. 26, 2026 1:05:44 A. M. okhttp3.internal.platform.Platform log
+INFORMACIÓN: --&gt; GET http://localhost:52588/api/puntos-venta
+nov. 26, 2026 1:05:44 A. M. okhttp3.internal.platform.Platform log
+INFORMACIÓN: &lt;-- 200 OK http://localhost:52588/api/puntos-venta (7ms, 171-byte body)
+nov. 26, 2026 1:05:44 A. M. okhttp3.internal.platform.Platform log
+INFORMACIÓN: --&gt; GET http://localhost:52588/api/puntos-venta?clienteId=5
+nov. 26, 2026 1:05:44 A. M. okhttp3.internal.platform.Platform log
+INFORMACIÓN: &lt;-- 200 OK http://localhost:52588/api/puntos-venta?clienteId=5 (4ms, 171-byte body)
+nov. 26, 2026 1:05:44 A. M. okhttp3.internal.platform.Platform log
+INFORMACIÓN: --&gt; POST http://localhost:52588/api/puntos-venta (123-byte body)
+nov. 26, 2026 1:05:44 A. M. okhttp3.internal.platform.Platform log
+INFORMACIÓN: &lt;-- 201 OK http://localhost:52588/api/puntos-venta (5ms, 169-byte body)
+nov. 26, 2026 1:05:44 A. M. okhttp3.internal.platform.Platform log
+INFORMACIÓN: --&gt; PUT http://localhost:52588/api/puntos-venta/1 (123-byte body)
+nov. 26, 2026 1:05:44 A. M. okhttp3.internal.platform.Platform log
+INFORMACIÓN: &lt;-- 200 OK http://localhost:52588/api/puntos-venta/1 (3ms, 169-byte body)
+nov. 26, 2026 1:05:44 A. M. okhttp3.internal.platform.Platform log
+INFORMACIÓN: --&gt; DELETE http://localhost:52588/api/puntos-venta/1
+nov. 26, 2026 1:05:44 A. M. okhttp3.internal.platform.Platform log
+INFORMACIÓN: &lt;-- 204 OK http://localhost:52588/api/puntos-venta/1 (3ms, 0-byte body)
+nov. 26, 2026 1:05:44 A. M. okhttp3.internal.platform.Platform log
+INFORMACIÓN: --&gt; GET http://localhost:52588/api/equipos
+nov. 26, 2026 1:05:44 A. M. okhttp3.internal.platform.Platform log
+INFORMACIÓN: &lt;-- 200 OK http://localhost:52588/api/equipos (2ms, 330-byte body)
+nov. 26, 2026 1:05:44 A. M. okhttp3.internal.platform.Platform log
+INFORMACIÓN: --&gt; GET http://localhost:52588/api/equipos?enBodega=true
+nov. 26, 2026 1:05:44 A. M. okhttp3.internal.platform.Platform log
+INFORMACIÓN: &lt;-- 200 OK http://localhost:52588/api/equipos?enBodega=true (3ms, 155-byte body)
+nov. 26, 2026 1:05:44 A. M. okhttp3.internal.platform.Platform log
+INFORMACIÓN: --&gt; GET http://localhost:52588/api/equipos?puntoVentaId=1
+nov. 26, 2026 1:05:44 A. M. okhttp3.internal.platform.Platform log
+INFORMACIÓN: &lt;-- 200 OK http://localhost:52588/api/equipos?puntoVentaId=1 (3ms, 175-byte body)
+nov. 26, 2026 1:05:44 A. M. okhttp3.internal.platform.Platform log
+INFORMACIÓN: --&gt; GET http://localhost:52588/api/equipos/2/historial
+nov. 26, 2026 1:05:44 A. M. okhttp3.internal.platform.Platform log
+INFORMACIÓN: &lt;-- 200 OK http://localhost:52588/api/equipos/2/historial (3ms, 667-byte body)
+nov. 26, 2026 1:05:44 A. M. okhttp3.internal.platform.Platform log
+INFORMACIÓN: --&gt; POST http://localhost:52588/api/equipos (102-byte body)
+nov. 26, 2026 1:05:44 A. M. okhttp3.internal.platform.Platform log
+INFORMACIÓN: &lt;-- 201 OK http://localhost:52588/api/equipos (7ms, 173-byte body)
+nov. 26, 2026 1:05:44 A. M. okhttp3.internal.platform.Platform log
+INFORMACIÓN: --&gt; PUT http://localhost:52588/api/equipos/2 (102-byte body)
+nov. 26, 2026 1:05:44 A. M. okhttp3.internal.platform.Platform log
+INFORMACIÓN: &lt;-- 200 OK http://localhost:52588/api/equipos/2 (4ms, 173-byte body)
+nov. 26, 2026 1:05:44 A. M. okhttp3.internal.platform.Platform log
+INFORMACIÓN: --&gt; DELETE http://localhost:52588/api/equipos/2
+nov. 26, 2026 1:05:44 A. M. okhttp3.internal.platform.Platform log
+INFORMACIÓN: &lt;-- 204 OK http://localhost:52588/api/equipos/2 (3ms, 0-byte body)
+nov. 26, 2026 1:05:44 A. M. okhttp3.internal.platform.Platform log
+INFORMACIÓN: --&gt; GET http://localhost:52590/api/solicitudes
+nov. 26, 2026 1:05:44 A. M. okhttp3.internal.platform.Platform log
+INFORMACIÓN: &lt;-- 200 OK http://localhost:52590/api/solicitudes (5ms, 714-byte body)
+nov. 26, 2026 1:05:44 A. M. okhttp3.internal.platform.Platform log
+INFORMACIÓN: --&gt; GET http://localhost:52590/api/solicitudes?operarioId=2&amp;estado=ASIGNADA
+nov. 26, 2026 1:05:44 A. M. okhttp3.internal.platform.Platform log
+INFORMACIÓN: &lt;-- 200 OK http://localhost:52590/api/solicitudes?operarioId=2&amp;estado=ASIGNADA (8ms, 714-byte body)
+nov. 26, 2026 1:05:44 A. M. okhttp3.internal.platform.Platform log
+INFORMACIÓN: --&gt; GET http://localhost:52590/api/solicitudes/1
+nov. 26, 2026 1:05:44 A. M. okhttp3.internal.platform.Platform log
+INFORMACIÓN: &lt;-- 200 OK http://localhost:52590/api/solicitudes/1 (7ms, 712-byte body)
+nov. 26, 2026 1:05:44 A. M. okhttp3.internal.platform.Platform log
+INFORMACIÓN: --&gt; POST http://localhost:52590/api/solicitudes (97-byte body)
+nov. 26, 2026 1:05:44 A. M. okhttp3.internal.platform.Platform log
+INFORMACIÓN: &lt;-- 201 OK http://localhost:52590/api/solicitudes (3ms, 712-byte body)
+nov. 26, 2026 1:05:44 A. M. okhttp3.internal.platform.Platform log
+INFORMACIÓN: --&gt; PUT http://localhost:52590/api/solicitudes/1 (38-byte body)
+nov. 26, 2026 1:05:44 A. M. okhttp3.internal.platform.Platform log
+INFORMACIÓN: &lt;-- 200 OK http://localhost:52590/api/solicitudes/1 (4ms, 712-byte body)
+nov. 26, 2026 1:05:44 A. M. okhttp3.internal.platform.Platform log
+INFORMACIÓN: --&gt; PUT http://localhost:52590/api/solicitudes/1/asignar (16-byte body)
+nov. 26, 2026 1:05:44 A. M. okhttp3.internal.platform.Platform log
+INFORMACIÓN: &lt;-- 200 OK http://localhost:52590/api/solicitudes/1/asignar (4ms, 712-byte body)
+nov. 26, 2026 1:05:44 A. M. okhttp3.internal.platform.Platform log
+INFORMACIÓN: --&gt; DELETE http://localhost:52590/api/solicitudes/1
+nov. 26, 2026 1:05:44 A. M. okhttp3.internal.platform.Platform log
+INFORMACIÓN: &lt;-- 204 OK http://localhost:52590/api/solicitudes/1 (4ms, 0-byte body)
+nov. 26, 2026 1:05:44 A. M. okhttp3.internal.platform.Platform log
+INFORMACIÓN: --&gt; GET http://localhost:52592/api/visitas
+nov. 26, 2026 1:05:44 A. M. okhttp3.internal.platform.Platform log
+INFORMACIÓN: &lt;-- 200 OK http://localhost:52592/api/visitas (5ms, 667-byte body)
+nov. 26, 2026 1:05:44 A. M. okhttp3.internal.platform.Platform log
+INFORMACIÓN: --&gt; GET http://localhost:52592/api/visitas?operarioId=2
+nov. 26, 2026 1:05:44 A. M. okhttp3.internal.platform.Platform log
+INFORMACIÓN: &lt;-- 200 OK http://localhost:52592/api/visitas?operarioId=2 (3ms, 667-byte body)
+nov. 26, 2026 1:05:44 A. M. okhttp3.internal.platform.Platform log
+INFORMACIÓN: --&gt; GET http://localhost:52592/api/visitas?estado=SOSPECHOSA
+nov. 26, 2026 1:05:44 A. M. okhttp3.internal.platform.Platform log
+INFORMACIÓN: &lt;-- 200 OK http://localhost:52592/api/visitas?estado=SOSPECHOSA (4ms, 2-byte body)
+nov. 26, 2026 1:05:44 A. M. okhttp3.internal.platform.Platform log
+INFORMACIÓN: --&gt; GET http://localhost:52592/api/visitas/1
+nov. 26, 2026 1:05:44 A. M. okhttp3.internal.platform.Platform log
+INFORMACIÓN: &lt;-- 200 OK http://localhost:52592/api/visitas/1 (4ms, 665-byte body)
+nov. 26, 2026 1:05:44 A. M. okhttp3.internal.platform.Platform log
+INFORMACIÓN: --&gt; POST http://localhost:52592/api/visitas (297-byte body)
+nov. 26, 2026 1:05:44 A. M. okhttp3.internal.platform.Platform log
+INFORMACIÓN: &lt;-- 201 OK http://localhost:52592/api/visitas (3ms, 665-byte body)
+nov. 26, 2026 1:05:44 A. M. okhttp3.internal.platform.Platform log
+INFORMACIÓN: --&gt; PUT http://localhost:52592/api/visitas/1/validar (51-byte body)
+nov. 26, 2026 1:05:44 A. M. okhttp3.internal.platform.Platform log
+INFORMACIÓN: &lt;-- 200 OK http://localhost:52592/api/visitas/1/validar (4ms, 643-byte body)
+nov. 26, 2026 1:05:44 A. M. okhttp3.internal.platform.Platform log
+INFORMACIÓN: --&gt; GET http://localhost:52594/v1/forecast?latitude=-33.5&amp;longitude=-70.75&amp;current=temperature_2m%2Crelative_humidity_2m%2Cweather_code&amp;timezone=auto
+nov. 26, 2026 1:05:44 A. M. okhttp3.internal.platform.Platform log
+INFORMACIÓN: &lt;-- 200 OK http://localhost:52594/v1/forecast?latitude=-33.5&amp;longitude=-70.75&amp;current=temperature_2m%2Crelative_humidity_2m%2Cweather_code&amp;timezone=auto (11ms, 155-byte body)
+nov. 26, 2026 1:05:44 A. M. okhttp3.internal.platform.Platform log
+INFORMACIÓN: --&gt; POST http://localhost:52596/api/auth/registro (84-byte body)
+nov. 26, 2026 1:05:44 A. M. okhttp3.internal.platform.Platform log
+INFORMACIÓN: &lt;-- 409 Client Error http://localhost:52596/api/auth/registro (7ms, 49-byte body)
+nov. 26, 2026 1:05:44 A. M. okhttp3.internal.platform.Platform log
+INFORMACIÓN: --&gt; DELETE http://localhost:52596/api/puntos-venta/1
+nov. 26, 2026 1:05:44 A. M. okhttp3.internal.platform.Platform log
+INFORMACIÓN: &lt;-- 409 Client Error http://localhost:52596/api/puntos-venta/1 (5ms, 78-byte body)
+nov. 26, 2026 1:05:44 A. M. okhttp3.internal.platform.Platform log
+INFORMACIÓN: --&gt; GET http://localhost:52596/api/puntos-venta
+nov. 26, 2026 1:05:44 A. M. okhttp3.internal.platform.Platform log
+INFORMACIÓN: &lt;-- 500 Server Error http://localhost:52596/api/puntos-venta (4ms, 18-byte body)
+nov. 26, 2026 1:05:44 A. M. okhttp3.internal.platform.Platform log
+INFORMACIÓN: --&gt; GET http://localhost:52598/api/solicitudes
+nov. 26, 2026 1:05:44 A. M. okhttp3.internal.platform.Platform log
+INFORMACIÓN: &lt;-- HTTP FAILED: java.net.ConnectException: Failed to connect to localhost/[0:0:0:0:0:0:0:1]:52598
+nov. 26, 2026 1:05:44 A. M. okhttp3.internal.platform.Platform log
+INFORMACIÓN: --&gt; POST http://localhost:52601/api/auth/login (57-byte body)
+nov. 26, 2026 1:05:44 A. M. okhttp3.internal.platform.Platform log
+INFORMACIÓN: &lt;-- 200 OK http://localhost:52601/api/auth/login (4ms, 150-byte body)
+</pre>
+</span>
+</div>
+</div>
+<div id="footer">
+<p>
+<div>
+<label class="hidden" id="label-for-line-wrapping-toggle" for="line-wrapping-toggle">Wrap lines
+<input id="line-wrapping-toggle" type="checkbox" autocomplete="off"/>
+</label>
+</div>Generated by 
+<a href="http://www.gradle.org">Gradle 8.11.1</a> at 26-11-2026 01:05:55</p>
+</div>
+</div>
+</body>
+</html>

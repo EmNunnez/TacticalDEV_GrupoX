@@ -1,0 +1,170 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>app Coverage Report > ApiUsuarios</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope: app<span class="separator">|</span>    <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">cl.duoc.tacticaldev.data.remote</a>
+</div>
+
+<h1>Coverage Summary for Class: ApiUsuarios (cl.duoc.tacticaldev.data.remote)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+<th class="coverageStat 
+">
+  Instruction, %
+</th>
+</tr>
+  <tr>
+    <td class="name">ApiUsuarios$DefaultImpls</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+    <td class="coverageStat"/>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (2/2)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+    <td class="coverageStat"/>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (2/2)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package cl.duoc.tacticaldev.data.remote
+&nbsp;
+&nbsp;import cl.duoc.tacticaldev.data.model.LoginRequest
+&nbsp;import cl.duoc.tacticaldev.data.model.Rol
+&nbsp;import cl.duoc.tacticaldev.data.model.Usuario
+&nbsp;import cl.duoc.tacticaldev.data.model.UsuarioRequest
+&nbsp;import retrofit2.Response
+&nbsp;import retrofit2.http.*
+&nbsp;
+&nbsp;/** Endpoints del microservicio ms-usuarios (puerto 8081). */
+&nbsp;interface ApiUsuarios {
+&nbsp;
+&nbsp;    @POST(&quot;api/auth/login&quot;)
+&nbsp;    suspend fun login(@Body req: LoginRequest): Usuario
+&nbsp;
+&nbsp;    @POST(&quot;api/auth/registro&quot;)
+&nbsp;    suspend fun registro(@Body req: UsuarioRequest): Usuario
+&nbsp;
+&nbsp;    @GET(&quot;api/usuarios&quot;)
+<b class="fc">&nbsp;    suspend fun listar(@Query(&quot;rol&quot;) rol: Rol? = null): List&lt;Usuario&gt;</b>
+&nbsp;
+&nbsp;    @GET(&quot;api/usuarios/{id}&quot;)
+&nbsp;    suspend fun obtener(@Path(&quot;id&quot;) id: Long): Usuario
+&nbsp;
+&nbsp;    @POST(&quot;api/usuarios&quot;)
+&nbsp;    suspend fun crear(@Body req: UsuarioRequest): Usuario
+&nbsp;
+&nbsp;    @PUT(&quot;api/usuarios/{id}&quot;)
+&nbsp;    suspend fun actualizar(@Path(&quot;id&quot;) id: Long, @Body req: UsuarioRequest): Usuario
+&nbsp;
+&nbsp;    @DELETE(&quot;api/usuarios/{id}&quot;)
+&nbsp;    suspend fun eliminar(@Path(&quot;id&quot;) id: Long): Response&lt;Unit&gt;
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2026-11-26 01:06</div>
+</div>
+</body>
+</html>

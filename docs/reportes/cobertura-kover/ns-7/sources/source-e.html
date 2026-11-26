@@ -1,0 +1,251 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>app Coverage Report > NuevaSolicitudErrores</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope: app<span class="separator">|</span>    <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">cl.duoc.tacticaldev.viewmodel</a>
+</div>
+
+<h1>Coverage Summary for Class: NuevaSolicitudErrores (cl.duoc.tacticaldev.viewmodel)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+<th class="coverageStat 
+">
+  Instruction, %
+</th>
+</tr>
+<tr>
+  <td class="name">NuevaSolicitudErrores</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (2/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (2/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (5/5)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (62/62)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package cl.duoc.tacticaldev.viewmodel
+&nbsp;
+&nbsp;import androidx.lifecycle.ViewModel
+&nbsp;import androidx.lifecycle.viewModelScope
+&nbsp;import cl.duoc.tacticaldev.data.model.*
+&nbsp;import cl.duoc.tacticaldev.repository.CatalogoRepository
+&nbsp;import cl.duoc.tacticaldev.repository.SolicitudRepository
+&nbsp;import cl.duoc.tacticaldev.util.ImageEncoder
+&nbsp;import cl.duoc.tacticaldev.util.Validaciones
+&nbsp;import kotlinx.coroutines.flow.MutableStateFlow
+&nbsp;import kotlinx.coroutines.flow.StateFlow
+&nbsp;import kotlinx.coroutines.flow.asStateFlow
+&nbsp;import kotlinx.coroutines.flow.update
+&nbsp;import kotlinx.coroutines.launch
+&nbsp;
+&nbsp;data class NuevaSolicitudErrores(
+<b class="fc">&nbsp;    val punto: String? = null,</b>
+<b class="fc">&nbsp;    val equipo: String? = null,</b>
+<b class="fc">&nbsp;    val tipoEquipo: String? = null,</b>
+<b class="fc">&nbsp;    val descripcion: String? = null</b>
+&nbsp;) {
+<b class="fc">&nbsp;    val hayErrores get() = listOf(punto, equipo, tipoEquipo, descripcion).any { it != null }</b>
+&nbsp;}
+&nbsp;
+&nbsp;data class NuevaSolicitudUiState(
+&nbsp;    val cargando: Boolean = false,
+&nbsp;    val puntos: List&lt;PuntoVenta&gt; = emptyList(),
+&nbsp;    val equiposDelPunto: List&lt;Equipo&gt; = emptyList(),
+&nbsp;    val tipo: TipoSolicitud = TipoSolicitud.REPARACION,
+&nbsp;    val puntoId: Long? = null,
+&nbsp;    val equipoId: Long? = null,
+&nbsp;    val tipoEquipo: TipoEquipo? = null,
+&nbsp;    val descripcion: String = &quot;&quot;,
+&nbsp;    /** Foto opcional de la falla (cámara o galería). */
+&nbsp;    val fotoUri: String? = null,
+&nbsp;    val errores: NuevaSolicitudErrores = NuevaSolicitudErrores(),
+&nbsp;    val enviando: Boolean = false,
+&nbsp;    val creada: Boolean = false,
+&nbsp;    val error: String? = null
+&nbsp;) {
+&nbsp;    val requiereEquipo get() = tipo != TipoSolicitud.EQUIPO_NUEVO
+&nbsp;}
+&nbsp;
+&nbsp;class NuevaSolicitudViewModel(
+&nbsp;    private val solicitudes: SolicitudRepository,
+&nbsp;    private val catalogo: CatalogoRepository,
+&nbsp;    private val encoder: ImageEncoder,
+&nbsp;    private val clienteId: Long
+&nbsp;) : ViewModel() {
+&nbsp;
+&nbsp;    /** Lo que un cliente puede pedir (REVISION la programa el supervisor). */
+&nbsp;    val tiposDisponibles = listOf(TipoSolicitud.REPARACION, TipoSolicitud.EQUIPO_NUEVO, TipoSolicitud.RETIRO)
+&nbsp;
+&nbsp;    private val _estado = MutableStateFlow(NuevaSolicitudUiState())
+&nbsp;    val estado: StateFlow&lt;NuevaSolicitudUiState&gt; = _estado.asStateFlow()
+&nbsp;
+&nbsp;    init {
+&nbsp;        _estado.update { it.copy(cargando = true) }
+&nbsp;        viewModelScope.launch {
+&nbsp;            catalogo.puntos(clienteId)
+&nbsp;                .onSuccess { puntos -&gt;
+&nbsp;                    _estado.update { it.copy(cargando = false, puntos = puntos) }
+&nbsp;                    if (puntos.size == 1) seleccionarPunto(puntos.first().id)
+&nbsp;                }
+&nbsp;                .onFailure { e -&gt; _estado.update { it.copy(cargando = false, error = e.message) } }
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    fun seleccionarTipo(tipo: TipoSolicitud) = _estado.update {
+&nbsp;        it.copy(tipo = tipo, equipoId = null, tipoEquipo = null, errores = NuevaSolicitudErrores())
+&nbsp;    }
+&nbsp;
+&nbsp;    fun seleccionarPunto(id: Long) {
+&nbsp;        _estado.update { it.copy(puntoId = id, equipoId = null, equiposDelPunto = emptyList(), errores = it.errores.copy(punto = null)) }
+&nbsp;        viewModelScope.launch {
+&nbsp;            catalogo.equipos(puntoVentaId = id)
+&nbsp;                .onSuccess { lista -&gt; _estado.update { it.copy(equiposDelPunto = lista) } }
+&nbsp;                .onFailure { e -&gt; _estado.update { it.copy(error = e.message) } }
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    fun seleccionarEquipo(id: Long) = _estado.update { it.copy(equipoId = id, errores = it.errores.copy(equipo = null)) }
+&nbsp;    fun seleccionarTipoEquipo(t: TipoEquipo) = _estado.update { it.copy(tipoEquipo = t, errores = it.errores.copy(tipoEquipo = null)) }
+&nbsp;    fun onDescripcion(v: String) = _estado.update { it.copy(descripcion = v, errores = it.errores.copy(descripcion = null)) }
+&nbsp;    fun onFoto(uri: String?) = _estado.update { it.copy(fotoUri = uri) }
+&nbsp;
+&nbsp;    fun validarFormulario(): Boolean {
+&nbsp;        val s = _estado.value
+&nbsp;        val errores = NuevaSolicitudErrores(
+&nbsp;            punto = if (s.puntoId == null) &quot;Seleccione el punto de venta&quot; else null,
+&nbsp;            equipo = if (s.requiereEquipo &amp;&amp; s.equipoId == null) &quot;Seleccione el equipo&quot; else null,
+&nbsp;            tipoEquipo = if (!s.requiereEquipo &amp;&amp; s.tipoEquipo == null) &quot;Indique qué equipo necesita&quot; else null,
+&nbsp;            descripcion = Validaciones.descripcion(s.descripcion)
+&nbsp;        )
+&nbsp;        _estado.update { it.copy(errores = errores) }
+&nbsp;        return !errores.hayErrores
+&nbsp;    }
+&nbsp;
+&nbsp;    fun enviar() {
+&nbsp;        if (_estado.value.enviando || !validarFormulario()) return
+&nbsp;        val s = _estado.value
+&nbsp;        _estado.update { it.copy(enviando = true, error = null) }
+&nbsp;        viewModelScope.launch {
+&nbsp;            val foto = s.fotoUri?.let { encoder.codificar(it) }
+&nbsp;            if (s.fotoUri != null &amp;&amp; foto == null) {
+&nbsp;                _estado.update { it.copy(enviando = false, error = &quot;No se pudo procesar la foto adjunta&quot;) }
+&nbsp;                return@launch
+&nbsp;            }
+&nbsp;            val req = SolicitudRequest(
+&nbsp;                tipo = s.tipo,
+&nbsp;                descripcion = s.descripcion.trim(),
+&nbsp;                clienteId = clienteId,
+&nbsp;                puntoVentaId = s.puntoId!!,
+&nbsp;                equipoId = if (s.requiereEquipo) s.equipoId else null,
+&nbsp;                tipoEquipoSolicitado = if (s.requiereEquipo) null else s.tipoEquipo,
+&nbsp;                fotoClienteBase64 = foto
+&nbsp;            )
+&nbsp;            solicitudes.crear(req)
+&nbsp;                .onSuccess { _estado.update { it.copy(enviando = false, creada = true) } }
+&nbsp;                .onFailure { e -&gt; _estado.update { it.copy(enviando = false, error = e.message) } }
+&nbsp;        }
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2026-11-26 01:06</div>
+</div>
+</body>
+</html>

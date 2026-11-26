@@ -1,0 +1,240 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>app Coverage Report > SupervisorUiState</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope: app<span class="separator">|</span>    <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">cl.duoc.tacticaldev.viewmodel</a>
+</div>
+
+<h1>Coverage Summary for Class: SupervisorUiState (cl.duoc.tacticaldev.viewmodel)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+<th class="coverageStat 
+">
+  Instruction, %
+</th>
+</tr>
+<tr>
+  <td class="name">SupervisorUiState</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (4/4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (8/8)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (12/12)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (109/109)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package cl.duoc.tacticaldev.viewmodel
+&nbsp;
+&nbsp;import androidx.lifecycle.ViewModel
+&nbsp;import androidx.lifecycle.viewModelScope
+&nbsp;import cl.duoc.tacticaldev.data.model.*
+&nbsp;import cl.duoc.tacticaldev.repository.CatalogoRepository
+&nbsp;import cl.duoc.tacticaldev.repository.SolicitudRepository
+&nbsp;import cl.duoc.tacticaldev.repository.UsuarioRepository
+&nbsp;import cl.duoc.tacticaldev.repository.VisitaRepository
+&nbsp;import kotlinx.coroutines.flow.MutableStateFlow
+&nbsp;import kotlinx.coroutines.flow.StateFlow
+&nbsp;import kotlinx.coroutines.flow.asStateFlow
+&nbsp;import kotlinx.coroutines.flow.update
+&nbsp;import kotlinx.coroutines.launch
+&nbsp;
+&nbsp;data class SupervisorUiState(
+<b class="fc">&nbsp;    val cargando: Boolean = false,</b>
+<b class="fc">&nbsp;    val solicitudes: List&lt;Solicitud&gt; = emptyList(),</b>
+<b class="fc">&nbsp;    val visitasPorRevisar: List&lt;Visita&gt; = emptyList(),</b>
+<b class="fc">&nbsp;    val operarios: List&lt;Usuario&gt; = emptyList(),</b>
+<b class="fc">&nbsp;    val equiposBodega: List&lt;Equipo&gt; = emptyList(),</b>
+<b class="fc">&nbsp;    val filtro: EstadoSolicitud? = null,</b>
+<b class="fc">&nbsp;    val procesando: Boolean = false,</b>
+<b class="fc">&nbsp;    val error: String? = null,</b>
+<b class="fc">&nbsp;    val mensaje: String? = null</b>
+&nbsp;) {
+<b class="fc">&nbsp;    val solicitudesFiltradas get() = if (filtro == null) solicitudes else solicitudes.filter { it.estado == filtro }</b>
+<b class="fc">&nbsp;    val pendientes get() = solicitudes.count { it.estado == EstadoSolicitud.PENDIENTE }</b>
+<b class="fc">&nbsp;    val sospechosas get() = visitasPorRevisar.count { it.estadoValidacion == EstadoValidacion.SOSPECHOSA }</b>
+&nbsp;}
+&nbsp;
+&nbsp;class SupervisorViewModel(
+&nbsp;    private val solicitudes: SolicitudRepository,
+&nbsp;    private val visitas: VisitaRepository,
+&nbsp;    private val usuarios: UsuarioRepository,
+&nbsp;    private val catalogo: CatalogoRepository
+&nbsp;) : ViewModel() {
+&nbsp;
+&nbsp;    private val _estado = MutableStateFlow(SupervisorUiState())
+&nbsp;    val estado: StateFlow&lt;SupervisorUiState&gt; = _estado.asStateFlow()
+&nbsp;
+&nbsp;    init {
+&nbsp;        cargar()
+&nbsp;    }
+&nbsp;
+&nbsp;    fun cargar() {
+&nbsp;        _estado.update { it.copy(cargando = true, error = null) }
+&nbsp;        viewModelScope.launch {
+&nbsp;            val rSol = solicitudes.listar()
+&nbsp;            val rPend = visitas.listar(estado = EstadoValidacion.PENDIENTE)
+&nbsp;            val rSosp = visitas.listar(estado = EstadoValidacion.SOSPECHOSA)
+&nbsp;            val rOps = usuarios.listar(Rol.OPERARIO)
+&nbsp;            val rBodega = catalogo.equipos(enBodega = true)
+&nbsp;            val porRevisar = (rSosp.getOrDefault(emptyList()) + rPend.getOrDefault(emptyList()))
+&nbsp;            _estado.update {
+&nbsp;                it.copy(
+&nbsp;                    cargando = false,
+&nbsp;                    solicitudes = rSol.getOrDefault(it.solicitudes),
+&nbsp;                    visitasPorRevisar = porRevisar,
+&nbsp;                    operarios = rOps.getOrDefault(it.operarios),
+&nbsp;                    equiposBodega = rBodega.getOrDefault(it.equiposBodega),
+&nbsp;                    error = listOf(rSol, rPend, rOps).firstNotNullOfOrNull { r -&gt; r.exceptionOrNull()?.message }
+&nbsp;                )
+&nbsp;            }
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    fun cambiarFiltro(estado: EstadoSolicitud?) = _estado.update { it.copy(filtro = estado) }
+&nbsp;
+&nbsp;    /** Misma regla que ms-operaciones: quién puede atender cada tipo de solicitud. */
+&nbsp;    fun operariosCompatibles(tipo: TipoSolicitud): List&lt;Usuario&gt; = _estado.value.operarios.filter { u -&gt;
+&nbsp;        u.activo &amp;&amp; when (tipo) {
+&nbsp;            TipoSolicitud.REPARACION -&gt; u.tipoOperario == TipoOperario.TECNICO
+&nbsp;            TipoSolicitud.EQUIPO_NUEVO, TipoSolicitud.RETIRO -&gt;
+&nbsp;                u.tipoOperario == TipoOperario.VENDEDOR || u.tipoOperario == TipoOperario.TRANSPORTISTA
+&nbsp;            TipoSolicitud.REVISION -&gt; true
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    /** Equipos de bodega que sirven para una solicitud de EQUIPO_NUEVO. */
+&nbsp;    fun equiposCompatibles(solicitud: Solicitud): List&lt;Equipo&gt; = _estado.value.equiposBodega.filter {
+&nbsp;        it.tipo == solicitud.tipoEquipoSolicitado &amp;&amp; it.estado == EstadoEquipo.OPERATIVO
+&nbsp;    }
+&nbsp;
+&nbsp;    fun asignar(solicitud: Solicitud, operarioId: Long?, equipoId: Long?) {
+&nbsp;        if (operarioId == null) {
+&nbsp;            _estado.update { it.copy(error = &quot;Seleccione un operario&quot;) }
+&nbsp;            return
+&nbsp;        }
+&nbsp;        if (solicitud.tipo == TipoSolicitud.EQUIPO_NUEVO &amp;&amp; equipoId == null) {
+&nbsp;            _estado.update { it.copy(error = &quot;Seleccione el equipo de bodega a instalar&quot;) }
+&nbsp;            return
+&nbsp;        }
+&nbsp;        _estado.update { it.copy(procesando = true) }
+&nbsp;        viewModelScope.launch {
+&nbsp;            solicitudes.asignar(solicitud.id, operarioId, equipoId)
+&nbsp;                .onSuccess { actualizada -&gt;
+&nbsp;                    _estado.update { s -&gt;
+&nbsp;                        s.copy(
+&nbsp;                            procesando = false,
+&nbsp;                            solicitudes = s.solicitudes.map { if (it.id == actualizada.id) actualizada else it },
+&nbsp;                            mensaje = &quot;Solicitud #${actualizada.id} asignada a ${actualizada.operarioNombre}&quot;
+&nbsp;                        )
+&nbsp;                    }
+&nbsp;                    if (solicitud.tipo == TipoSolicitud.EQUIPO_NUEVO) cargar()
+&nbsp;                }
+&nbsp;                .onFailure { e -&gt; _estado.update { it.copy(procesando = false, error = e.message) } }
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    fun limpiarMensajes() = _estado.update { it.copy(error = null, mensaje = null) }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2026-11-26 01:06</div>
+</div>
+</body>
+</html>

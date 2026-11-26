@@ -1,0 +1,226 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>app Coverage Report > ClienteUiState</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope: app<span class="separator">|</span>    <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">cl.duoc.tacticaldev.viewmodel</a>
+</div>
+
+<h1>Coverage Summary for Class: ClienteUiState (cl.duoc.tacticaldev.viewmodel)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+<th class="coverageStat 
+">
+  Instruction, %
+</th>
+</tr>
+<tr>
+  <td class="name">ClienteUiState</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (2/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (2/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (7/7)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (55/55)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package cl.duoc.tacticaldev.viewmodel
+&nbsp;
+&nbsp;import androidx.lifecycle.ViewModel
+&nbsp;import androidx.lifecycle.viewModelScope
+&nbsp;import cl.duoc.tacticaldev.data.model.Equipo
+&nbsp;import cl.duoc.tacticaldev.data.model.EstadoSolicitud
+&nbsp;import cl.duoc.tacticaldev.data.model.PuntoVenta
+&nbsp;import cl.duoc.tacticaldev.data.model.Solicitud
+&nbsp;import cl.duoc.tacticaldev.repository.CatalogoRepository
+&nbsp;import cl.duoc.tacticaldev.repository.SolicitudRepository
+&nbsp;import cl.duoc.tacticaldev.util.Validaciones
+&nbsp;import kotlinx.coroutines.flow.MutableStateFlow
+&nbsp;import kotlinx.coroutines.flow.StateFlow
+&nbsp;import kotlinx.coroutines.flow.asStateFlow
+&nbsp;import kotlinx.coroutines.flow.update
+&nbsp;import kotlinx.coroutines.launch
+&nbsp;
+&nbsp;data class ClienteUiState(
+<b class="fc">&nbsp;    val cargando: Boolean = false,</b>
+<b class="fc">&nbsp;    val solicitudes: List&lt;Solicitud&gt; = emptyList(),</b>
+<b class="fc">&nbsp;    val puntos: List&lt;PuntoVenta&gt; = emptyList(),</b>
+<b class="fc">&nbsp;    val equipos: List&lt;Equipo&gt; = emptyList(),</b>
+<b class="fc">&nbsp;    val error: String? = null,</b>
+<b class="fc">&nbsp;    val mensaje: String? = null</b>
+&nbsp;) {
+<b class="fc">&nbsp;    val abiertas get() = solicitudes.count { it.estado != EstadoSolicitud.VALIDADA }</b>
+&nbsp;}
+&nbsp;
+&nbsp;class ClienteViewModel(
+&nbsp;    private val solicitudes: SolicitudRepository,
+&nbsp;    private val catalogo: CatalogoRepository,
+&nbsp;    private val clienteId: Long
+&nbsp;) : ViewModel() {
+&nbsp;
+&nbsp;    private val _estado = MutableStateFlow(ClienteUiState())
+&nbsp;    val estado: StateFlow&lt;ClienteUiState&gt; = _estado.asStateFlow()
+&nbsp;
+&nbsp;    init {
+&nbsp;        cargar()
+&nbsp;    }
+&nbsp;
+&nbsp;    fun cargar() {
+&nbsp;        _estado.update { it.copy(cargando = true, error = null) }
+&nbsp;        viewModelScope.launch {
+&nbsp;            val rSolicitudes = solicitudes.listar(clienteId = clienteId)
+&nbsp;            val rPuntos = catalogo.puntos(clienteId)
+&nbsp;            val puntos = rPuntos.getOrDefault(emptyList())
+&nbsp;            val equipos = puntos.flatMap { p -&gt; catalogo.equipos(puntoVentaId = p.id).getOrDefault(emptyList()) }
+&nbsp;            val error = (rSolicitudes.exceptionOrNull() ?: rPuntos.exceptionOrNull())?.message
+&nbsp;            _estado.update {
+&nbsp;                it.copy(
+&nbsp;                    cargando = false,
+&nbsp;                    solicitudes = rSolicitudes.getOrDefault(it.solicitudes),
+&nbsp;                    puntos = puntos,
+&nbsp;                    equipos = equipos,
+&nbsp;                    error = error
+&nbsp;                )
+&nbsp;            }
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    /** DELETE: solo solicitudes PENDIENTES. */
+&nbsp;    fun cancelar(solicitud: Solicitud) {
+&nbsp;        if (solicitud.estado != EstadoSolicitud.PENDIENTE) {
+&nbsp;            _estado.update { it.copy(error = &quot;Solo puede cancelar solicitudes pendientes&quot;) }
+&nbsp;            return
+&nbsp;        }
+&nbsp;        viewModelScope.launch {
+&nbsp;            solicitudes.eliminar(solicitud.id)
+&nbsp;                .onSuccess {
+&nbsp;                    _estado.update { s -&gt;
+&nbsp;                        s.copy(solicitudes = s.solicitudes.filterNot { it.id == solicitud.id }, mensaje = &quot;Solicitud cancelada&quot;)
+&nbsp;                    }
+&nbsp;                }
+&nbsp;                .onFailure { e -&gt; _estado.update { it.copy(error = e.message) } }
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    /** UPDATE: el cliente corrige la descripción mientras nadie la ha tomado. Devuelve el error o null. */
+&nbsp;    fun editarDescripcion(solicitud: Solicitud, descripcion: String): String? {
+&nbsp;        Validaciones.descripcion(descripcion)?.let { return it }
+&nbsp;        viewModelScope.launch {
+&nbsp;            solicitudes.actualizarDescripcion(solicitud.id, descripcion)
+&nbsp;                .onSuccess { actualizada -&gt;
+&nbsp;                    _estado.update { s -&gt;
+&nbsp;                        s.copy(
+&nbsp;                            solicitudes = s.solicitudes.map { if (it.id == actualizada.id) actualizada else it },
+&nbsp;                            mensaje = &quot;Solicitud actualizada&quot;
+&nbsp;                        )
+&nbsp;                    }
+&nbsp;                }
+&nbsp;                .onFailure { e -&gt; _estado.update { it.copy(error = e.message) } }
+&nbsp;        }
+&nbsp;        return null
+&nbsp;    }
+&nbsp;
+&nbsp;    fun limpiarMensajes() = _estado.update { it.copy(error = null, mensaje = null) }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2026-11-26 01:06</div>
+</div>
+</body>
+</html>

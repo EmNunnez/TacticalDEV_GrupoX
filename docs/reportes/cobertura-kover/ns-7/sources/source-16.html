@@ -1,0 +1,262 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>app Coverage Report > RegistroViewModel</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope: app<span class="separator">|</span>    <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">cl.duoc.tacticaldev.viewmodel</a>
+</div>
+
+<h1>Coverage Summary for Class: RegistroViewModel (cl.duoc.tacticaldev.viewmodel)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+<th class="coverageStat 
+">
+  Instruction, %
+</th>
+</tr>
+<tr>
+  <td class="name">RegistroViewModel</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (9/9)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    83,3%
+  </span>
+  <span class="absValue">
+    (5/6)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (23/23)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (303/303)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">RegistroViewModel$registrar$2</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (6/6)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (5/5)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (143/143)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (10/10)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    91,7%
+  </span>
+  <span class="absValue">
+    (11/12)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (28/28)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (446/446)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package cl.duoc.tacticaldev.viewmodel
+&nbsp;
+&nbsp;import androidx.lifecycle.ViewModel
+&nbsp;import androidx.lifecycle.viewModelScope
+&nbsp;import cl.duoc.tacticaldev.repository.AuthRepository
+&nbsp;import cl.duoc.tacticaldev.util.Validaciones
+&nbsp;import kotlinx.coroutines.flow.MutableStateFlow
+&nbsp;import kotlinx.coroutines.flow.StateFlow
+&nbsp;import kotlinx.coroutines.flow.asStateFlow
+&nbsp;import kotlinx.coroutines.flow.update
+&nbsp;import kotlinx.coroutines.launch
+&nbsp;
+&nbsp;data class RegistroErrores(
+&nbsp;    val nombre: String? = null,
+&nbsp;    val email: String? = null,
+&nbsp;    val telefono: String? = null,
+&nbsp;    val password: String? = null,
+&nbsp;    val confirmar: String? = null,
+&nbsp;    val terminos: String? = null
+&nbsp;) {
+&nbsp;    val hayErrores get() = listOf(nombre, email, telefono, password, confirmar, terminos).any { it != null }
+&nbsp;}
+&nbsp;
+&nbsp;data class RegistroUiState(
+&nbsp;    val nombre: String = &quot;&quot;,
+&nbsp;    val email: String = &quot;&quot;,
+&nbsp;    val telefono: String = &quot;&quot;,
+&nbsp;    val password: String = &quot;&quot;,
+&nbsp;    val confirmar: String = &quot;&quot;,
+&nbsp;    val aceptaTerminos: Boolean = false,
+&nbsp;    val errores: RegistroErrores = RegistroErrores(),
+&nbsp;    val cargando: Boolean = false,
+&nbsp;    val error: String? = null
+&nbsp;)
+&nbsp;
+&nbsp;/** Registro de CLIENTES (dueños de minimarket). Operarios y supervisores los crea el supervisor. */
+<b class="fc">&nbsp;class RegistroViewModel(private val auth: AuthRepository) : ViewModel() {</b>
+&nbsp;
+<b class="fc">&nbsp;    private val _estado = MutableStateFlow(RegistroUiState())</b>
+<b class="fc">&nbsp;    val estado: StateFlow&lt;RegistroUiState&gt; = _estado.asStateFlow()</b>
+&nbsp;
+<b class="fc">&nbsp;    fun onNombre(v: String) = _estado.update { it.copy(nombre = v, errores = it.errores.copy(nombre = null)) }</b>
+<b class="fc">&nbsp;    fun onEmail(v: String) = _estado.update { it.copy(email = v, errores = it.errores.copy(email = null)) }</b>
+<b class="fc">&nbsp;    fun onTelefono(v: String) = _estado.update { it.copy(telefono = v, errores = it.errores.copy(telefono = null)) }</b>
+<b class="fc">&nbsp;    fun onPassword(v: String) = _estado.update { it.copy(password = v, errores = it.errores.copy(password = null)) }</b>
+<b class="fc">&nbsp;    fun onConfirmar(v: String) = _estado.update { it.copy(confirmar = v, errores = it.errores.copy(confirmar = null)) }</b>
+<b class="fc">&nbsp;    fun onTerminos(v: Boolean) = _estado.update { it.copy(aceptaTerminos = v, errores = it.errores.copy(terminos = null)) }</b>
+&nbsp;
+&nbsp;    fun validarFormulario(): Boolean {
+<b class="fc">&nbsp;        val s = _estado.value</b>
+<b class="fc">&nbsp;        val errores = RegistroErrores(</b>
+<b class="fc">&nbsp;            nombre = Validaciones.nombre(s.nombre),</b>
+<b class="fc">&nbsp;            email = Validaciones.email(s.email),</b>
+<b class="fc">&nbsp;            telefono = Validaciones.telefono(s.telefono),</b>
+<b class="fc">&nbsp;            password = Validaciones.password(s.password),</b>
+<b class="fc">&nbsp;            confirmar = Validaciones.confirmarPassword(s.password, s.confirmar),</b>
+<b class="fc">&nbsp;            terminos = if (s.aceptaTerminos) null else &quot;Debe aceptar el uso de cámara y ubicación&quot;</b>
+&nbsp;        )
+<b class="fc">&nbsp;        _estado.update { it.copy(errores = errores) }</b>
+<b class="fc">&nbsp;        return !errores.hayErrores</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /** Crea la cuenta y luego inicia sesión automáticamente. */
+&nbsp;    fun registrar() {
+<b class="pc">&nbsp;        if (_estado.value.cargando || !validarFormulario()) return</b>
+<b class="fc">&nbsp;        val s = _estado.value</b>
+<b class="fc">&nbsp;        _estado.update { it.copy(cargando = true, error = null) }</b>
+<b class="fc">&nbsp;        viewModelScope.launch {</b>
+<b class="fc">&nbsp;            val resultado = auth.registrarCliente(s.nombre, s.email, s.telefono, s.password)</b>
+<b class="fc">&nbsp;                .mapCatching { auth.login(s.email, s.password).getOrThrow() }</b>
+<b class="fc">&nbsp;            resultado</b>
+<b class="fc">&nbsp;                .onSuccess { _estado.update { it.copy(cargando = false) } }</b>
+<b class="fc">&nbsp;                .onFailure { e -&gt; _estado.update { it.copy(cargando = false, error = e.message) } }</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2026-11-26 01:06</div>
+</div>
+</body>
+</html>

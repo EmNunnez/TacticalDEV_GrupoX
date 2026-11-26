@@ -1,0 +1,241 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>app Coverage Report > EquipoRequest</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope: app<span class="separator">|</span>    <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">cl.duoc.tacticaldev.data.model</a>
+</div>
+
+<h1>Coverage Summary for Class: EquipoRequest (cl.duoc.tacticaldev.data.model)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+<th class="coverageStat 
+">
+  Instruction, %
+</th>
+</tr>
+<tr>
+  <td class="name">EquipoRequest</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+    <td class="coverageStat"/>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (7/7)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (32/32)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package cl.duoc.tacticaldev.data.model
+&nbsp;
+&nbsp;data class PuntoVenta(
+&nbsp;    val id: Long,
+&nbsp;    val nombre: String,
+&nbsp;    val direccion: String,
+&nbsp;    val comuna: String,
+&nbsp;    val latitud: Double,
+&nbsp;    val longitud: Double,
+&nbsp;    val radioMetros: Int,
+&nbsp;    val clienteId: Long
+&nbsp;)
+&nbsp;
+&nbsp;data class PuntoVentaRequest(
+&nbsp;    val nombre: String,
+&nbsp;    val direccion: String,
+&nbsp;    val comuna: String,
+&nbsp;    val latitud: Double,
+&nbsp;    val longitud: Double,
+&nbsp;    val radioMetros: Int,
+&nbsp;    val clienteId: Long
+&nbsp;)
+&nbsp;
+&nbsp;data class Equipo(
+&nbsp;    val id: Long,
+&nbsp;    val codigo: String,
+&nbsp;    val tipo: TipoEquipo,
+&nbsp;    val marca: String,
+&nbsp;    val modelo: String,
+&nbsp;    val estado: EstadoEquipo,
+&nbsp;    val puntoVentaId: Long?,
+&nbsp;    val puntoVentaNombre: String?
+&nbsp;)
+&nbsp;
+<b class="fc">&nbsp;data class EquipoRequest(</b>
+<b class="fc">&nbsp;    val codigo: String,</b>
+<b class="fc">&nbsp;    val tipo: TipoEquipo,</b>
+<b class="fc">&nbsp;    val marca: String,</b>
+<b class="fc">&nbsp;    val modelo: String,</b>
+<b class="fc">&nbsp;    val estado: EstadoEquipo,</b>
+<b class="fc">&nbsp;    val puntoVentaId: Long?</b>
+&nbsp;)
+&nbsp;
+&nbsp;data class Solicitud(
+&nbsp;    val id: Long,
+&nbsp;    val tipo: TipoSolicitud,
+&nbsp;    val estado: EstadoSolicitud,
+&nbsp;    val descripcion: String,
+&nbsp;    val tipoEquipoSolicitado: TipoEquipo?,
+&nbsp;    val tieneFotoCliente: Boolean,
+&nbsp;    val fotoClienteBase64: String?,
+&nbsp;    val clienteId: Long,
+&nbsp;    val clienteNombre: String?,
+&nbsp;    val puntoVenta: PuntoVenta,
+&nbsp;    val equipo: Equipo?,
+&nbsp;    val operarioId: Long?,
+&nbsp;    val operarioNombre: String?,
+&nbsp;    val fechaCreacion: String?,
+&nbsp;    val fechaAsignacion: String?,
+&nbsp;    val fechaCierre: String?
+&nbsp;)
+&nbsp;
+&nbsp;data class SolicitudRequest(
+&nbsp;    val tipo: TipoSolicitud,
+&nbsp;    val descripcion: String,
+&nbsp;    val clienteId: Long,
+&nbsp;    val puntoVentaId: Long,
+&nbsp;    val equipoId: Long?,
+&nbsp;    val tipoEquipoSolicitado: TipoEquipo?,
+&nbsp;    val fotoClienteBase64: String?
+&nbsp;)
+&nbsp;
+&nbsp;data class SolicitudUpdateRequest(val descripcion: String)
+&nbsp;
+&nbsp;data class AsignarRequest(val operarioId: Long, val equipoId: Long?)
+&nbsp;
+&nbsp;data class Visita(
+&nbsp;    val id: Long,
+&nbsp;    val idLocal: String,
+&nbsp;    val solicitudId: Long,
+&nbsp;    val tipoSolicitud: TipoSolicitud,
+&nbsp;    val puntoVentaNombre: String,
+&nbsp;    val equipoCodigo: String?,
+&nbsp;    val operarioId: Long,
+&nbsp;    val operarioNombre: String?,
+&nbsp;    val estadoEquipo: EstadoEquipo,
+&nbsp;    val observaciones: String?,
+&nbsp;    val fotoBase64: String?,
+&nbsp;    val latitud: Double,
+&nbsp;    val longitud: Double,
+&nbsp;    val precisionMetros: Double?,
+&nbsp;    val ubicacionSimulada: Boolean,
+&nbsp;    val fechaCaptura: String?,
+&nbsp;    val fechaRegistro: String?,
+&nbsp;    val distanciaMetros: Double,
+&nbsp;    val ubicacionVerificada: Boolean,
+&nbsp;    val motivoVerificacion: String?,
+&nbsp;    val temperaturaAmbiente: Double?,
+&nbsp;    val estadoValidacion: EstadoValidacion,
+&nbsp;    val comentarioSupervisor: String?,
+&nbsp;    val fechaValidacion: String?
+&nbsp;)
+&nbsp;
+&nbsp;data class VisitaRequest(
+&nbsp;    val idLocal: String,
+&nbsp;    val solicitudId: Long,
+&nbsp;    val operarioId: Long,
+&nbsp;    val estadoEquipo: EstadoEquipo,
+&nbsp;    val observaciones: String?,
+&nbsp;    val fotoBase64: String,
+&nbsp;    val latitud: Double,
+&nbsp;    val longitud: Double,
+&nbsp;    val precisionMetros: Double?,
+&nbsp;    val ubicacionSimulada: Boolean,
+&nbsp;    /** Formato ISO-8601 sin zona: 2026-11-18T19:57:03 */
+&nbsp;    val fechaCaptura: String,
+&nbsp;    val temperaturaAmbiente: Double?
+&nbsp;)
+&nbsp;
+&nbsp;data class ValidarRequest(val aprobada: Boolean, val comentario: String?)
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2026-11-26 01:06</div>
+</div>
+</body>
+</html>

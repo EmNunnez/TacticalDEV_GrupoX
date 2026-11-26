@@ -1,0 +1,147 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>app Coverage Report > ClimaResponse</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope: app<span class="separator">|</span>    <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">cl.duoc.tacticaldev.data.model</a>
+</div>
+
+<h1>Coverage Summary for Class: ClimaResponse (cl.duoc.tacticaldev.data.model)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+<th class="coverageStat 
+">
+  Instruction, %
+</th>
+</tr>
+<tr>
+  <td class="name">ClimaResponse</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+    <td class="coverageStat"/>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (4/4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (17/17)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package cl.duoc.tacticaldev.data.model
+&nbsp;
+&nbsp;import com.google.gson.annotations.SerializedName
+&nbsp;
+&nbsp;/** Respuesta de la API externa Open-Meteo (https://open-meteo.com, sin API key). */
+<b class="fc">&nbsp;data class ClimaResponse(</b>
+<b class="fc">&nbsp;    val latitude: Double?,</b>
+<b class="fc">&nbsp;    val longitude: Double?,</b>
+<b class="fc">&nbsp;    val current: ClimaActual?</b>
+&nbsp;)
+&nbsp;
+&nbsp;data class ClimaActual(
+&nbsp;    val time: String?,
+&nbsp;    @SerializedName(&quot;temperature_2m&quot;) val temperatura: Double?,
+&nbsp;    @SerializedName(&quot;relative_humidity_2m&quot;) val humedad: Int?,
+&nbsp;    @SerializedName(&quot;weather_code&quot;) val codigoClima: Int?
+&nbsp;)
+&nbsp;
+&nbsp;/** Modelo que usa la UI. */
+&nbsp;data class Clima(
+&nbsp;    val temperatura: Double,
+&nbsp;    val humedad: Int?,
+&nbsp;    val descripcion: String,
+&nbsp;    /** Sobre 30 °C aumenta el riesgo de falla en equipos de frío. */
+&nbsp;    val riesgoAltaTemperatura: Boolean
+&nbsp;)
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2026-11-26 01:06</div>
+</div>
+</body>
+</html>

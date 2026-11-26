@@ -1,0 +1,133 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>app Coverage Report > SesionStore</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope: app<span class="separator">|</span>    <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">cl.duoc.tacticaldev.data.local</a>
+</div>
+
+<h1>Coverage Summary for Class: SesionStore (cl.duoc.tacticaldev.data.local)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+</tr>
+<tr>
+  <td class="name">SesionStore</td>
+    <td class="coverageStat"/>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package cl.duoc.tacticaldev.data.local
+&nbsp;
+&nbsp;import android.content.Context
+&nbsp;import androidx.datastore.preferences.core.edit
+&nbsp;import androidx.datastore.preferences.core.longPreferencesKey
+&nbsp;import androidx.datastore.preferences.core.stringPreferencesKey
+&nbsp;import androidx.datastore.preferences.preferencesDataStore
+&nbsp;import cl.duoc.tacticaldev.data.model.Rol
+&nbsp;import cl.duoc.tacticaldev.data.model.Sesion
+&nbsp;import cl.duoc.tacticaldev.data.model.TipoOperario
+&nbsp;import cl.duoc.tacticaldev.data.model.Usuario
+&nbsp;import kotlinx.coroutines.flow.Flow
+&nbsp;import kotlinx.coroutines.flow.map
+&nbsp;
+&nbsp;/** Abstracción para poder simular la sesión en las pruebas unitarias. */
+&nbsp;interface SesionStore {
+&nbsp;    val sesion: Flow&lt;Sesion?&gt;
+&nbsp;    suspend fun guardar(usuario: Usuario)
+&nbsp;    suspend fun cerrar()
+&nbsp;}
+&nbsp;
+&nbsp;private val Context.dataStore by preferencesDataStore(name = &quot;sesion&quot;)
+&nbsp;
+&nbsp;/** Sesión persistente con DataStore Preferences (la app recuerda al usuario). */
+&nbsp;class DataStoreSesionStore(private val context: Context) : SesionStore {
+&nbsp;
+&nbsp;    private object Keys {
+&nbsp;        val ID = longPreferencesKey(&quot;id&quot;)
+&nbsp;        val NOMBRE = stringPreferencesKey(&quot;nombre&quot;)
+&nbsp;        val EMAIL = stringPreferencesKey(&quot;email&quot;)
+&nbsp;        val ROL = stringPreferencesKey(&quot;rol&quot;)
+&nbsp;        val TIPO = stringPreferencesKey(&quot;tipo_operario&quot;)
+&nbsp;    }
+&nbsp;
+&nbsp;    override val sesion: Flow&lt;Sesion?&gt; = context.dataStore.data.map { p -&gt;
+&nbsp;        val id = p[Keys.ID] ?: return@map null
+&nbsp;        val rol = p[Keys.ROL]?.let { runCatching { Rol.valueOf(it) }.getOrNull() } ?: return@map null
+&nbsp;        Sesion(
+&nbsp;            id = id,
+&nbsp;            nombre = p[Keys.NOMBRE].orEmpty(),
+&nbsp;            email = p[Keys.EMAIL].orEmpty(),
+&nbsp;            rol = rol,
+&nbsp;            tipoOperario = p[Keys.TIPO]?.let { runCatching { TipoOperario.valueOf(it) }.getOrNull() }
+&nbsp;        )
+&nbsp;    }
+&nbsp;
+&nbsp;    override suspend fun guardar(usuario: Usuario) {
+&nbsp;        context.dataStore.edit { p -&gt;
+&nbsp;            p[Keys.ID] = usuario.id
+&nbsp;            p[Keys.NOMBRE] = usuario.nombre
+&nbsp;            p[Keys.EMAIL] = usuario.email
+&nbsp;            p[Keys.ROL] = usuario.rol.name
+&nbsp;            if (usuario.tipoOperario != null) p[Keys.TIPO] = usuario.tipoOperario.name else p.remove(Keys.TIPO)
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    override suspend fun cerrar() {
+&nbsp;        context.dataStore.edit { it.clear() }
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2026-11-26 01:06</div>
+</div>
+</body>
+</html>

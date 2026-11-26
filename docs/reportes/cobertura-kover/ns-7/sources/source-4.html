@@ -1,0 +1,198 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>app Coverage Report > DetalleVisitaUiState</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope: app<span class="separator">|</span>    <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">cl.duoc.tacticaldev.viewmodel</a>
+</div>
+
+<h1>Coverage Summary for Class: DetalleVisitaUiState (cl.duoc.tacticaldev.viewmodel)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+<th class="coverageStat 
+">
+  Instruction, %
+</th>
+</tr>
+<tr>
+  <td class="name">DetalleVisitaUiState</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (2/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (8/8)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (9/9)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (72/72)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package cl.duoc.tacticaldev.viewmodel
+&nbsp;
+&nbsp;import androidx.lifecycle.ViewModel
+&nbsp;import androidx.lifecycle.viewModelScope
+&nbsp;import cl.duoc.tacticaldev.data.model.EstadoValidacion
+&nbsp;import cl.duoc.tacticaldev.data.model.Visita
+&nbsp;import cl.duoc.tacticaldev.repository.VisitaRepository
+&nbsp;import kotlinx.coroutines.flow.MutableStateFlow
+&nbsp;import kotlinx.coroutines.flow.StateFlow
+&nbsp;import kotlinx.coroutines.flow.asStateFlow
+&nbsp;import kotlinx.coroutines.flow.update
+&nbsp;import kotlinx.coroutines.launch
+&nbsp;
+&nbsp;data class DetalleVisitaUiState(
+<b class="fc">&nbsp;    val cargando: Boolean = true,</b>
+<b class="fc">&nbsp;    val visita: Visita? = null,</b>
+<b class="fc">&nbsp;    val comentario: String = &quot;&quot;,</b>
+<b class="fc">&nbsp;    val comentarioError: String? = null,</b>
+<b class="fc">&nbsp;    val procesando: Boolean = false,</b>
+<b class="fc">&nbsp;    val terminado: Boolean = false,</b>
+<b class="fc">&nbsp;    val error: String? = null</b>
+&nbsp;) {
+<b class="fc">&nbsp;    val puedeValidar get() = visita?.estadoValidacion == EstadoValidacion.PENDIENTE ||</b>
+<b class="fc">&nbsp;            visita?.estadoValidacion == EstadoValidacion.SOSPECHOSA</b>
+&nbsp;}
+&nbsp;
+&nbsp;class DetalleVisitaViewModel(
+&nbsp;    private val visitas: VisitaRepository,
+&nbsp;    private val visitaId: Long
+&nbsp;) : ViewModel() {
+&nbsp;
+&nbsp;    private val _estado = MutableStateFlow(DetalleVisitaUiState())
+&nbsp;    val estado: StateFlow&lt;DetalleVisitaUiState&gt; = _estado.asStateFlow()
+&nbsp;
+&nbsp;    init {
+&nbsp;        viewModelScope.launch {
+&nbsp;            visitas.obtener(visitaId)
+&nbsp;                .onSuccess { v -&gt; _estado.update { it.copy(cargando = false, visita = v) } }
+&nbsp;                .onFailure { e -&gt; _estado.update { it.copy(cargando = false, error = e.message) } }
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    fun onComentario(v: String) = _estado.update { it.copy(comentario = v, comentarioError = null) }
+&nbsp;
+&nbsp;    /** Reglas: rechazar exige motivo; aprobar una visita SOSPECHOSA exige justificación. */
+&nbsp;    fun validarComentario(aprobada: Boolean): Boolean {
+&nbsp;        val s = _estado.value
+&nbsp;        val sospechosa = s.visita?.estadoValidacion == EstadoValidacion.SOSPECHOSA
+&nbsp;        val error = when {
+&nbsp;            !aprobada &amp;&amp; s.comentario.isBlank() -&gt; &quot;Indique el motivo del rechazo&quot;
+&nbsp;            aprobada &amp;&amp; sospechosa &amp;&amp; s.comentario.isBlank() -&gt; &quot;Justifique por qué aprueba una visita sospechosa&quot;
+&nbsp;            s.comentario.length &gt; 300 -&gt; &quot;Máximo 300 caracteres&quot;
+&nbsp;            else -&gt; null
+&nbsp;        }
+&nbsp;        _estado.update { it.copy(comentarioError = error) }
+&nbsp;        return error == null
+&nbsp;    }
+&nbsp;
+&nbsp;    fun validar(aprobada: Boolean) {
+&nbsp;        if (_estado.value.procesando || !validarComentario(aprobada)) return
+&nbsp;        _estado.update { it.copy(procesando = true, error = null) }
+&nbsp;        viewModelScope.launch {
+&nbsp;            visitas.validar(visitaId, aprobada, _estado.value.comentario)
+&nbsp;                .onSuccess { v -&gt;
+&nbsp;                    _estado.update { it.copy(procesando = false, terminado = true, visita = v.copy(fotoBase64 = it.visita?.fotoBase64)) }
+&nbsp;                }
+&nbsp;                .onFailure { e -&gt; _estado.update { it.copy(procesando = false, error = e.message) } }
+&nbsp;        }
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2026-11-26 01:06</div>
+</div>
+</body>
+</html>

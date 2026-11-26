@@ -1,0 +1,218 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>app Coverage Report > ApiOperaciones</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope: app<span class="separator">|</span>    <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">cl.duoc.tacticaldev.data.remote</a>
+</div>
+
+<h1>Coverage Summary for Class: ApiOperaciones (cl.duoc.tacticaldev.data.remote)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+<th class="coverageStat 
+">
+  Instruction, %
+</th>
+</tr>
+  <tr>
+    <td class="name">ApiOperaciones$DefaultImpls</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (4/4)
+  </span>
+</td>
+    <td class="coverageStat"/>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (9/9)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (18/18)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (4/4)
+  </span>
+</td>
+    <td class="coverageStat"/>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (9/9)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (18/18)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package cl.duoc.tacticaldev.data.remote
+&nbsp;
+&nbsp;import cl.duoc.tacticaldev.data.model.*
+&nbsp;import retrofit2.Response
+&nbsp;import retrofit2.http.*
+&nbsp;
+&nbsp;/** Endpoints del microservicio ms-operaciones (puerto 8082). */
+&nbsp;interface ApiOperaciones {
+&nbsp;
+&nbsp;    // ---------- Puntos de venta ----------
+&nbsp;    @GET(&quot;api/puntos-venta&quot;)
+<b class="fc">&nbsp;    suspend fun listarPuntos(@Query(&quot;clienteId&quot;) clienteId: Long? = null): List&lt;PuntoVenta&gt;</b>
+&nbsp;
+&nbsp;    @POST(&quot;api/puntos-venta&quot;)
+&nbsp;    suspend fun crearPunto(@Body req: PuntoVentaRequest): PuntoVenta
+&nbsp;
+&nbsp;    @PUT(&quot;api/puntos-venta/{id}&quot;)
+&nbsp;    suspend fun actualizarPunto(@Path(&quot;id&quot;) id: Long, @Body req: PuntoVentaRequest): PuntoVenta
+&nbsp;
+&nbsp;    @DELETE(&quot;api/puntos-venta/{id}&quot;)
+&nbsp;    suspend fun eliminarPunto(@Path(&quot;id&quot;) id: Long): Response&lt;Unit&gt;
+&nbsp;
+&nbsp;    // ---------- Equipos ----------
+&nbsp;    @GET(&quot;api/equipos&quot;)
+&nbsp;    suspend fun listarEquipos(
+<b class="fc">&nbsp;        @Query(&quot;puntoVentaId&quot;) puntoVentaId: Long? = null,</b>
+<b class="fc">&nbsp;        @Query(&quot;enBodega&quot;) enBodega: Boolean? = null</b>
+&nbsp;    ): List&lt;Equipo&gt;
+&nbsp;
+&nbsp;    @GET(&quot;api/equipos/{id}/historial&quot;)
+&nbsp;    suspend fun historialEquipo(@Path(&quot;id&quot;) id: Long): List&lt;Visita&gt;
+&nbsp;
+&nbsp;    @POST(&quot;api/equipos&quot;)
+&nbsp;    suspend fun crearEquipo(@Body req: EquipoRequest): Equipo
+&nbsp;
+&nbsp;    @PUT(&quot;api/equipos/{id}&quot;)
+&nbsp;    suspend fun actualizarEquipo(@Path(&quot;id&quot;) id: Long, @Body req: EquipoRequest): Equipo
+&nbsp;
+&nbsp;    @DELETE(&quot;api/equipos/{id}&quot;)
+&nbsp;    suspend fun eliminarEquipo(@Path(&quot;id&quot;) id: Long): Response&lt;Unit&gt;
+&nbsp;
+&nbsp;    // ---------- Solicitudes ----------
+&nbsp;    @GET(&quot;api/solicitudes&quot;)
+&nbsp;    suspend fun listarSolicitudes(
+<b class="fc">&nbsp;        @Query(&quot;clienteId&quot;) clienteId: Long? = null,</b>
+<b class="fc">&nbsp;        @Query(&quot;operarioId&quot;) operarioId: Long? = null,</b>
+<b class="fc">&nbsp;        @Query(&quot;estado&quot;) estado: EstadoSolicitud? = null</b>
+&nbsp;    ): List&lt;Solicitud&gt;
+&nbsp;
+&nbsp;    @GET(&quot;api/solicitudes/{id}&quot;)
+&nbsp;    suspend fun obtenerSolicitud(@Path(&quot;id&quot;) id: Long): Solicitud
+&nbsp;
+&nbsp;    @POST(&quot;api/solicitudes&quot;)
+&nbsp;    suspend fun crearSolicitud(@Body req: SolicitudRequest): Solicitud
+&nbsp;
+&nbsp;    @PUT(&quot;api/solicitudes/{id}&quot;)
+&nbsp;    suspend fun actualizarSolicitud(@Path(&quot;id&quot;) id: Long, @Body req: SolicitudUpdateRequest): Solicitud
+&nbsp;
+&nbsp;    @PUT(&quot;api/solicitudes/{id}/asignar&quot;)
+&nbsp;    suspend fun asignarSolicitud(@Path(&quot;id&quot;) id: Long, @Body req: AsignarRequest): Solicitud
+&nbsp;
+&nbsp;    @DELETE(&quot;api/solicitudes/{id}&quot;)
+&nbsp;    suspend fun eliminarSolicitud(@Path(&quot;id&quot;) id: Long): Response&lt;Unit&gt;
+&nbsp;
+&nbsp;    // ---------- Visitas ----------
+&nbsp;    @GET(&quot;api/visitas&quot;)
+&nbsp;    suspend fun listarVisitas(
+<b class="fc">&nbsp;        @Query(&quot;operarioId&quot;) operarioId: Long? = null,</b>
+<b class="fc">&nbsp;        @Query(&quot;solicitudId&quot;) solicitudId: Long? = null,</b>
+<b class="fc">&nbsp;        @Query(&quot;estado&quot;) estado: EstadoValidacion? = null</b>
+&nbsp;    ): List&lt;Visita&gt;
+&nbsp;
+&nbsp;    @GET(&quot;api/visitas/{id}&quot;)
+&nbsp;    suspend fun obtenerVisita(@Path(&quot;id&quot;) id: Long): Visita
+&nbsp;
+&nbsp;    @POST(&quot;api/visitas&quot;)
+&nbsp;    suspend fun registrarVisita(@Body req: VisitaRequest): Visita
+&nbsp;
+&nbsp;    @PUT(&quot;api/visitas/{id}/validar&quot;)
+&nbsp;    suspend fun validarVisita(@Path(&quot;id&quot;) id: Long, @Body req: ValidarRequest): Visita
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2026-11-26 01:06</div>
+</div>
+</body>
+</html>

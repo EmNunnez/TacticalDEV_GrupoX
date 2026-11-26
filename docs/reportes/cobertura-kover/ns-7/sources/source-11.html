@@ -1,0 +1,205 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>app Coverage Report > OperarioUiState</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope: app<span class="separator">|</span>    <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">cl.duoc.tacticaldev.viewmodel</a>
+</div>
+
+<h1>Coverage Summary for Class: OperarioUiState (cl.duoc.tacticaldev.viewmodel)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+<th class="coverageStat 
+">
+  Instruction, %
+</th>
+</tr>
+<tr>
+  <td class="name">OperarioUiState</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+    <td class="coverageStat"/>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (8/8)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (56/56)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package cl.duoc.tacticaldev.viewmodel
+&nbsp;
+&nbsp;import androidx.lifecycle.ViewModel
+&nbsp;import androidx.lifecycle.viewModelScope
+&nbsp;import cl.duoc.tacticaldev.data.model.EstadoSolicitud
+&nbsp;import cl.duoc.tacticaldev.data.model.Solicitud
+&nbsp;import cl.duoc.tacticaldev.data.model.Visita
+&nbsp;import cl.duoc.tacticaldev.repository.SolicitudRepository
+&nbsp;import cl.duoc.tacticaldev.repository.VisitaRepository
+&nbsp;import kotlinx.coroutines.flow.MutableStateFlow
+&nbsp;import kotlinx.coroutines.flow.StateFlow
+&nbsp;import kotlinx.coroutines.flow.asStateFlow
+&nbsp;import kotlinx.coroutines.flow.update
+&nbsp;import kotlinx.coroutines.launch
+&nbsp;
+&nbsp;data class OperarioUiState(
+<b class="fc">&nbsp;    val cargando: Boolean = false,</b>
+<b class="fc">&nbsp;    val asignadas: List&lt;Solicitud&gt; = emptyList(),</b>
+<b class="fc">&nbsp;    val visitas: List&lt;Visita&gt; = emptyList(),</b>
+&nbsp;    /** Visitas guardadas en el teléfono esperando internet. */
+<b class="fc">&nbsp;    val pendientesSync: Int = 0,</b>
+<b class="fc">&nbsp;    val solicitudesConPendiente: Set&lt;Long&gt; = emptySet(),</b>
+<b class="fc">&nbsp;    val sincronizando: Boolean = false,</b>
+<b class="fc">&nbsp;    val error: String? = null,</b>
+<b class="fc">&nbsp;    val mensaje: String? = null</b>
+&nbsp;)
+&nbsp;
+&nbsp;class OperarioViewModel(
+&nbsp;    private val solicitudes: SolicitudRepository,
+&nbsp;    private val visitas: VisitaRepository,
+&nbsp;    private val operarioId: Long
+&nbsp;) : ViewModel() {
+&nbsp;
+&nbsp;    private val _estado = MutableStateFlow(OperarioUiState())
+&nbsp;    val estado: StateFlow&lt;OperarioUiState&gt; = _estado.asStateFlow()
+&nbsp;
+&nbsp;    init {
+&nbsp;        viewModelScope.launch {
+&nbsp;            visitas.pendientes(operarioId).collect { lista -&gt;
+&nbsp;                _estado.update { s -&gt;
+&nbsp;                    s.copy(pendientesSync = lista.size, solicitudesConPendiente = lista.map { it.solicitudId }.toSet())
+&nbsp;                }
+&nbsp;            }
+&nbsp;        }
+&nbsp;        cargar()
+&nbsp;    }
+&nbsp;
+&nbsp;    fun cargar() {
+&nbsp;        _estado.update { it.copy(cargando = true, error = null) }
+&nbsp;        viewModelScope.launch {
+&nbsp;            // Primero intenta subir lo que quedó guardado sin conexión
+&nbsp;            if (visitas.solicitudesConPendiente(operarioId).isNotEmpty()) visitas.sincronizar(operarioId)
+&nbsp;
+&nbsp;            val rAsignadas = solicitudes.listar(operarioId = operarioId, estado = EstadoSolicitud.ASIGNADA)
+&nbsp;            val rVisitas = visitas.listar(operarioId = operarioId)
+&nbsp;            _estado.update {
+&nbsp;                it.copy(
+&nbsp;                    cargando = false,
+&nbsp;                    asignadas = rAsignadas.getOrDefault(it.asignadas),
+&nbsp;                    visitas = rVisitas.getOrDefault(it.visitas),
+&nbsp;                    error = rAsignadas.exceptionOrNull()?.message
+&nbsp;                )
+&nbsp;            }
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    fun sincronizar() {
+&nbsp;        if (_estado.value.sincronizando) return
+&nbsp;        _estado.update { it.copy(sincronizando = true) }
+&nbsp;        viewModelScope.launch {
+&nbsp;            val r = visitas.sincronizar(operarioId)
+&nbsp;            val mensaje = when {
+&nbsp;                r.enviadas == 0 &amp;&amp; r.rechazadas == 0 &amp;&amp; r.pendientes == 0 -&gt; &quot;No hay visitas pendientes&quot;
+&nbsp;                r.pendientes &gt; 0 -&gt; &quot;Sin conexión: ${r.pendientes} visita(s) siguen pendientes&quot;
+&nbsp;                r.rechazadas &gt; 0 -&gt; &quot;${r.enviadas} enviada(s), ${r.rechazadas} rechazada(s) por el servidor&quot;
+&nbsp;                else -&gt; &quot;${r.enviadas} visita(s) sincronizada(s)&quot;
+&nbsp;            }
+&nbsp;            _estado.update { it.copy(sincronizando = false, mensaje = mensaje) }
+&nbsp;            if (r.enviadas &gt; 0 || r.rechazadas &gt; 0) cargar()
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    fun limpiarMensajes() = _estado.update { it.copy(error = null, mensaje = null) }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2026-11-26 01:06</div>
+</div>
+</body>
+</html>

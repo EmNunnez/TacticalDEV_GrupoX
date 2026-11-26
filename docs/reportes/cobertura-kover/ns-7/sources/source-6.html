@@ -1,0 +1,408 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>app Coverage Report > EquipoForm</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope: app<span class="separator">|</span>    <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">cl.duoc.tacticaldev.viewmodel</a>
+</div>
+
+<h1>Coverage Summary for Class: EquipoForm (cl.duoc.tacticaldev.viewmodel)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+<th class="coverageStat 
+">
+  Instruction, %
+</th>
+</tr>
+<tr>
+  <td class="name">EquipoForm</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+    <td class="coverageStat"/>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (6/6)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (42/42)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package cl.duoc.tacticaldev.viewmodel
+&nbsp;
+&nbsp;import androidx.lifecycle.ViewModel
+&nbsp;import androidx.lifecycle.viewModelScope
+&nbsp;import cl.duoc.tacticaldev.data.model.*
+&nbsp;import cl.duoc.tacticaldev.repository.CatalogoRepository
+&nbsp;import cl.duoc.tacticaldev.repository.SolicitudRepository
+&nbsp;import cl.duoc.tacticaldev.repository.UsuarioRepository
+&nbsp;import cl.duoc.tacticaldev.util.LocationProvider
+&nbsp;import cl.duoc.tacticaldev.util.UbicacionCapturada
+&nbsp;import cl.duoc.tacticaldev.util.Validaciones
+&nbsp;import kotlinx.coroutines.flow.MutableStateFlow
+&nbsp;import kotlinx.coroutines.flow.StateFlow
+&nbsp;import kotlinx.coroutines.flow.asStateFlow
+&nbsp;import kotlinx.coroutines.flow.update
+&nbsp;import kotlinx.coroutines.launch
+&nbsp;
+&nbsp;// ---------- Formularios (lo que escribe el supervisor) ----------
+&nbsp;
+&nbsp;data class PuntoForm(
+&nbsp;    val nombre: String = &quot;&quot;,
+&nbsp;    val direccion: String = &quot;&quot;,
+&nbsp;    val comuna: String = &quot;&quot;,
+&nbsp;    val latitud: String = &quot;&quot;,
+&nbsp;    val longitud: String = &quot;&quot;,
+&nbsp;    val radio: String = &quot;100&quot;,
+&nbsp;    val clienteId: Long? = null
+&nbsp;)
+&nbsp;
+&nbsp;data class EquipoForm(
+<b class="fc">&nbsp;    val codigo: String = &quot;&quot;,</b>
+<b class="fc">&nbsp;    val tipo: TipoEquipo? = null,</b>
+<b class="fc">&nbsp;    val marca: String = &quot;&quot;,</b>
+<b class="fc">&nbsp;    val modelo: String = &quot;&quot;,</b>
+<b class="fc">&nbsp;    val estado: EstadoEquipo = EstadoEquipo.OPERATIVO,</b>
+<b class="fc">&nbsp;    val puntoVentaId: Long? = null</b>
+&nbsp;)
+&nbsp;
+&nbsp;data class UsuarioForm(
+&nbsp;    val nombre: String = &quot;&quot;,
+&nbsp;    val email: String = &quot;&quot;,
+&nbsp;    val telefono: String = &quot;&quot;,
+&nbsp;    val password: String = &quot;&quot;,
+&nbsp;    val rol: Rol? = null,
+&nbsp;    val tipoOperario: TipoOperario? = null,
+&nbsp;    val activo: Boolean = true
+&nbsp;)
+&nbsp;
+&nbsp;data class GestionUiState(
+&nbsp;    val cargando: Boolean = false,
+&nbsp;    val puntos: List&lt;PuntoVenta&gt; = emptyList(),
+&nbsp;    val equipos: List&lt;Equipo&gt; = emptyList(),
+&nbsp;    val usuarios: List&lt;Usuario&gt; = emptyList(),
+&nbsp;    val erroresForm: Map&lt;String, String&gt; = emptyMap(),
+&nbsp;    val guardando: Boolean = false,
+&nbsp;    val guardado: Boolean = false,
+&nbsp;    val ubicacionActual: UbicacionCapturada? = null,
+&nbsp;    val obteniendoUbicacion: Boolean = false,
+&nbsp;    val error: String? = null,
+&nbsp;    val mensaje: String? = null,
+&nbsp;    // Formularios en el ViewModel: sobreviven a la rotación de pantalla
+&nbsp;    val puntoForm: PuntoForm = PuntoForm(),
+&nbsp;    val equipoForm: EquipoForm = EquipoForm(),
+&nbsp;    val usuarioForm: UsuarioForm = UsuarioForm(),
+&nbsp;    /** Evita sobreescribir lo que el usuario ya editó al recargar las listas. */
+&nbsp;    val formCargado: String? = null
+&nbsp;) {
+&nbsp;    val clientes get() = usuarios.filter { it.rol == Rol.CLIENTE }
+&nbsp;    val equiposConFalla get() = equipos.count { it.estado == EstadoEquipo.CON_FALLA }
+&nbsp;}
+&nbsp;
+&nbsp;/** CRUD de datos maestros que administra el Supervisor. */
+&nbsp;class GestionViewModel(
+&nbsp;    private val catalogo: CatalogoRepository,
+&nbsp;    private val usuarios: UsuarioRepository,
+&nbsp;    private val solicitudes: SolicitudRepository,
+&nbsp;    private val gps: LocationProvider
+&nbsp;) : ViewModel() {
+&nbsp;
+&nbsp;    private val _estado = MutableStateFlow(GestionUiState())
+&nbsp;    val estado: StateFlow&lt;GestionUiState&gt; = _estado.asStateFlow()
+&nbsp;
+&nbsp;    init {
+&nbsp;        cargar()
+&nbsp;    }
+&nbsp;
+&nbsp;    fun cargar() {
+&nbsp;        _estado.update { it.copy(cargando = true, error = null) }
+&nbsp;        viewModelScope.launch {
+&nbsp;            val rP = catalogo.puntos()
+&nbsp;            val rE = catalogo.equipos()
+&nbsp;            val rU = usuarios.listar()
+&nbsp;            _estado.update {
+&nbsp;                it.copy(
+&nbsp;                    cargando = false,
+&nbsp;                    puntos = rP.getOrDefault(it.puntos),
+&nbsp;                    equipos = rE.getOrDefault(it.equipos),
+&nbsp;                    usuarios = rU.getOrDefault(it.usuarios),
+&nbsp;                    error = listOf(rP, rE, rU).firstNotNullOfOrNull { r -&gt; r.exceptionOrNull()?.message }
+&nbsp;                )
+&nbsp;            }
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    // ---------- estado de los formularios ----------
+&nbsp;    fun onPuntoForm(f: PuntoForm) = _estado.update { it.copy(puntoForm = f) }
+&nbsp;    fun onEquipoForm(f: EquipoForm) = _estado.update { it.copy(equipoForm = f) }
+&nbsp;    fun onUsuarioForm(f: UsuarioForm) = _estado.update { it.copy(usuarioForm = f) }
+&nbsp;
+&nbsp;    /** Rellena el formulario con la entidad a editar (una sola vez). */
+&nbsp;    fun prepararPunto(id: Long) {
+&nbsp;        if (_estado.value.formCargado == &quot;p$id&quot;) return
+&nbsp;        val p = _estado.value.puntos.firstOrNull { it.id == id } ?: return
+&nbsp;        _estado.update {
+&nbsp;            it.copy(
+&nbsp;                formCargado = &quot;p$id&quot;,
+&nbsp;                puntoForm = PuntoForm(p.nombre, p.direccion, p.comuna, p.latitud.toString(), p.longitud.toString(),
+&nbsp;                    p.radioMetros.toString(), p.clienteId)
+&nbsp;            )
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    fun prepararEquipo(id: Long) {
+&nbsp;        if (_estado.value.formCargado == &quot;e$id&quot;) return
+&nbsp;        val e = _estado.value.equipos.firstOrNull { it.id == id } ?: return
+&nbsp;        _estado.update {
+&nbsp;            it.copy(formCargado = &quot;e$id&quot;, equipoForm = EquipoForm(e.codigo, e.tipo, e.marca, e.modelo, e.estado, e.puntoVentaId))
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    fun prepararUsuario(id: Long) {
+&nbsp;        if (_estado.value.formCargado == &quot;u$id&quot;) return
+&nbsp;        val u = _estado.value.usuarios.firstOrNull { it.id == id } ?: return
+&nbsp;        _estado.update {
+&nbsp;            it.copy(
+&nbsp;                formCargado = &quot;u$id&quot;,
+&nbsp;                usuarioForm = UsuarioForm(u.nombre, u.email, u.telefono.orEmpty(), &quot;&quot;, u.rol, u.tipoOperario, u.activo)
+&nbsp;            )
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    fun limpiarMensajes() = _estado.update { it.copy(error = null, mensaje = null) }
+&nbsp;    fun reiniciarFormulario() = _estado.update { it.copy(erroresForm = emptyMap(), guardado = false, error = null) }
+&nbsp;
+&nbsp;    // ================= PUNTOS DE VENTA =================
+&nbsp;
+&nbsp;    fun validarPunto(f: PuntoForm): Map&lt;String, String&gt; = buildMap {
+&nbsp;        Validaciones.obligatorio(f.nombre, &quot;El nombre&quot;)?.let { put(&quot;nombre&quot;, it) }
+&nbsp;        Validaciones.obligatorio(f.direccion, &quot;La dirección&quot;)?.let { put(&quot;direccion&quot;, it) }
+&nbsp;        Validaciones.obligatorio(f.comuna, &quot;La comuna&quot;)?.let { put(&quot;comuna&quot;, it) }
+&nbsp;        Validaciones.latitud(f.latitud)?.let { put(&quot;latitud&quot;, it) }
+&nbsp;        Validaciones.longitud(f.longitud)?.let { put(&quot;longitud&quot;, it) }
+&nbsp;        Validaciones.radio(f.radio)?.let { put(&quot;radio&quot;, it) }
+&nbsp;        if (f.clienteId == null) put(&quot;cliente&quot;, &quot;Seleccione el cliente dueño del local&quot;)
+&nbsp;    }
+&nbsp;
+&nbsp;    fun guardarPunto(id: Long?, f: PuntoForm) {
+&nbsp;        if (!aceptarFormulario(validarPunto(f))) return
+&nbsp;        val req = PuntoVentaRequest(
+&nbsp;            nombre = f.nombre.trim(), direccion = f.direccion.trim(), comuna = f.comuna.trim(),
+&nbsp;            latitud = f.latitud.replace(&#39;,&#39;, &#39;.&#39;).toDouble(), longitud = f.longitud.replace(&#39;,&#39;, &#39;.&#39;).toDouble(),
+&nbsp;            radioMetros = f.radio.toInt(), clienteId = f.clienteId!!
+&nbsp;        )
+&nbsp;        guardar { if (id == null) catalogo.crearPunto(req) else catalogo.actualizarPunto(id, req) }
+&nbsp;    }
+&nbsp;
+&nbsp;    fun eliminarPunto(id: Long) = eliminar(&quot;Punto de venta eliminado&quot;) { catalogo.eliminarPunto(id) }
+&nbsp;
+&nbsp;    /** Para registrar un local nuevo parado en la puerta: toma el GPS actual. */
+&nbsp;    fun usarUbicacionActual() {
+&nbsp;        _estado.update { it.copy(obteniendoUbicacion = true) }
+&nbsp;        viewModelScope.launch {
+&nbsp;            val ub = gps.obtenerUbicacionActual()
+&nbsp;            _estado.update {
+&nbsp;                it.copy(
+&nbsp;                    obteniendoUbicacion = false,
+&nbsp;                    ubicacionActual = ub,
+&nbsp;                    puntoForm = if (ub == null) it.puntoForm
+&nbsp;                    else it.puntoForm.copy(latitud = ub.latitud.toString(), longitud = ub.longitud.toString()),
+&nbsp;                    error = if (ub == null) &quot;No se pudo obtener la ubicación. Revise el permiso de GPS&quot; else null
+&nbsp;                )
+&nbsp;            }
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    // ================= EQUIPOS =================
+&nbsp;
+&nbsp;    fun validarEquipo(f: EquipoForm): Map&lt;String, String&gt; = buildMap {
+&nbsp;        Validaciones.codigoEquipo(f.codigo)?.let { put(&quot;codigo&quot;, it) }
+&nbsp;        if (f.tipo == null) put(&quot;tipo&quot;, &quot;Seleccione el tipo de equipo&quot;)
+&nbsp;        Validaciones.obligatorio(f.marca, &quot;La marca&quot;)?.let { put(&quot;marca&quot;, it) }
+&nbsp;        Validaciones.obligatorio(f.modelo, &quot;El modelo&quot;)?.let { put(&quot;modelo&quot;, it) }
+&nbsp;        if (f.estado == EstadoEquipo.RETIRADO &amp;&amp; f.puntoVentaId != null) {
+&nbsp;            put(&quot;punto&quot;, &quot;Un equipo retirado debe quedar en bodega&quot;)
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    fun guardarEquipo(id: Long?, f: EquipoForm) {
+&nbsp;        if (!aceptarFormulario(validarEquipo(f))) return
+&nbsp;        val req = EquipoRequest(
+&nbsp;            codigo = f.codigo.trim().uppercase(), tipo = f.tipo!!, marca = f.marca.trim(),
+&nbsp;            modelo = f.modelo.trim(), estado = f.estado, puntoVentaId = f.puntoVentaId
+&nbsp;        )
+&nbsp;        guardar { if (id == null) catalogo.crearEquipo(req) else catalogo.actualizarEquipo(id, req) }
+&nbsp;    }
+&nbsp;
+&nbsp;    fun eliminarEquipo(id: Long) = eliminar(&quot;Equipo eliminado&quot;) { catalogo.eliminarEquipo(id) }
+&nbsp;
+&nbsp;    /** Visita periódica: el supervisor crea una solicitud REVISION para un equipo instalado. */
+&nbsp;    fun programarRevision(equipo: Equipo) {
+&nbsp;        val punto = _estado.value.puntos.firstOrNull { it.id == equipo.puntoVentaId }
+&nbsp;        if (punto == null) {
+&nbsp;            _estado.update { it.copy(error = &quot;Solo se pueden revisar equipos instalados en un punto de venta&quot;) }
+&nbsp;            return
+&nbsp;        }
+&nbsp;        viewModelScope.launch {
+&nbsp;            solicitudes.crear(
+&nbsp;                SolicitudRequest(
+&nbsp;                    tipo = TipoSolicitud.REVISION,
+&nbsp;                    descripcion = &quot;Revisión periódica programada del equipo ${equipo.codigo}&quot;,
+&nbsp;                    clienteId = punto.clienteId,
+&nbsp;                    puntoVentaId = punto.id,
+&nbsp;                    equipoId = equipo.id,
+&nbsp;                    tipoEquipoSolicitado = null,
+&nbsp;                    fotoClienteBase64 = null
+&nbsp;                )
+&nbsp;            )
+&nbsp;                .onSuccess { s -&gt; _estado.update { it.copy(mensaje = &quot;Revisión #${s.id} creada. Asígnela en Solicitudes&quot;) } }
+&nbsp;                .onFailure { e -&gt; _estado.update { it.copy(error = e.message) } }
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    // ================= USUARIOS =================
+&nbsp;
+&nbsp;    fun validarUsuario(f: UsuarioForm, esNuevo: Boolean): Map&lt;String, String&gt; = buildMap {
+&nbsp;        Validaciones.nombre(f.nombre)?.let { put(&quot;nombre&quot;, it) }
+&nbsp;        Validaciones.email(f.email)?.let { put(&quot;email&quot;, it) }
+&nbsp;        Validaciones.telefono(f.telefono)?.let { put(&quot;telefono&quot;, it) }
+&nbsp;        (if (esNuevo) Validaciones.password(f.password) else Validaciones.passwordOpcional(f.password))
+&nbsp;            ?.let { put(&quot;password&quot;, it) }
+&nbsp;        if (f.rol == null) put(&quot;rol&quot;, &quot;Seleccione el rol&quot;)
+&nbsp;        if (f.rol == Rol.OPERARIO &amp;&amp; f.tipoOperario == null) put(&quot;tipoOperario&quot;, &quot;Seleccione el tipo de operario&quot;)
+&nbsp;    }
+&nbsp;
+&nbsp;    fun guardarUsuario(id: Long?, f: UsuarioForm) {
+&nbsp;        if (!aceptarFormulario(validarUsuario(f, id == null))) return
+&nbsp;        val req = UsuarioRequest(
+&nbsp;            nombre = f.nombre.trim(), email = f.email.trim(), password = f.password.ifEmpty { null },
+&nbsp;            telefono = f.telefono.trim().ifBlank { null }, rol = f.rol!!,
+&nbsp;            tipoOperario = if (f.rol == Rol.OPERARIO) f.tipoOperario else null, activo = f.activo
+&nbsp;        )
+&nbsp;        guardar { if (id == null) usuarios.crear(req) else usuarios.actualizar(id, req) }
+&nbsp;    }
+&nbsp;
+&nbsp;    fun eliminarUsuario(id: Long) = eliminar(&quot;Usuario eliminado&quot;) { usuarios.eliminar(id) }
+&nbsp;
+&nbsp;    // ================= helpers =================
+&nbsp;
+&nbsp;    private fun aceptarFormulario(errores: Map&lt;String, String&gt;): Boolean {
+&nbsp;        _estado.update { it.copy(erroresForm = errores) }
+&nbsp;        return errores.isEmpty()
+&nbsp;    }
+&nbsp;
+&nbsp;    private fun guardar(operacion: suspend () -&gt; Result&lt;*&gt;) {
+&nbsp;        if (_estado.value.guardando) return
+&nbsp;        _estado.update { it.copy(guardando = true, error = null) }
+&nbsp;        viewModelScope.launch {
+&nbsp;            operacion()
+&nbsp;                .onSuccess {
+&nbsp;                    _estado.update { it.copy(guardando = false, guardado = true, mensaje = &quot;Guardado correctamente&quot;) }
+&nbsp;                    cargar()
+&nbsp;                }
+&nbsp;                .onFailure { e -&gt; _estado.update { it.copy(guardando = false, error = e.message) } }
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    private fun eliminar(mensajeOk: String, operacion: suspend () -&gt; Result&lt;Unit&gt;) {
+&nbsp;        viewModelScope.launch {
+&nbsp;            operacion()
+&nbsp;                .onSuccess {
+&nbsp;                    _estado.update { it.copy(mensaje = mensajeOk) }
+&nbsp;                    cargar()
+&nbsp;                }
+&nbsp;                .onFailure { e -&gt; _estado.update { it.copy(error = e.message) } }
+&nbsp;        }
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2026-11-26 01:06</div>
+</div>
+</body>
+</html>

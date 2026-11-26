@@ -1,0 +1,444 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>app Coverage Report > VisitaViewModel</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope: app<span class="separator">|</span>    <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">cl.duoc.tacticaldev.viewmodel</a>
+</div>
+
+<h1>Coverage Summary for Class: VisitaViewModel (cl.duoc.tacticaldev.viewmodel)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+<th class="coverageStat 
+">
+  Instruction, %
+</th>
+</tr>
+<tr>
+  <td class="name">VisitaViewModel</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (7/7)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    86,7%
+  </span>
+  <span class="absValue">
+    (26/30)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (41/41)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    99,5%
+  </span>
+  <span class="absValue">
+    (402/404)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">VisitaViewModel$3</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (4/4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (3/3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (88/88)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">VisitaViewModel$cargarClima$1</td>
+    <td class="coverageStat"/>
+  </tr>
+  <tr>
+    <td class="name">VisitaViewModel$enviar$2</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    90%
+  </span>
+  <span class="absValue">
+    (9/10)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (19/19)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    99,6%
+  </span>
+  <span class="absValue">
+    (222/223)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">VisitaViewModel$onFotoTomada$2</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (10/10)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (27/27)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (179/179)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (10/10)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    90,7%
+  </span>
+  <span class="absValue">
+    (49/54)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (90/90)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    99,7%
+  </span>
+  <span class="absValue">
+    (891/894)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package cl.duoc.tacticaldev.viewmodel
+&nbsp;
+&nbsp;import androidx.lifecycle.ViewModel
+&nbsp;import androidx.lifecycle.viewModelScope
+&nbsp;import cl.duoc.tacticaldev.data.model.Clima
+&nbsp;import cl.duoc.tacticaldev.data.model.EstadoEquipo
+&nbsp;import cl.duoc.tacticaldev.data.model.Solicitud
+&nbsp;import cl.duoc.tacticaldev.data.model.VisitaRequest
+&nbsp;import cl.duoc.tacticaldev.repository.ClimaRepository
+&nbsp;import cl.duoc.tacticaldev.repository.ResultadoRegistro
+&nbsp;import cl.duoc.tacticaldev.repository.SolicitudRepository
+&nbsp;import cl.duoc.tacticaldev.repository.VisitaRepository
+&nbsp;import cl.duoc.tacticaldev.util.*
+&nbsp;import kotlinx.coroutines.flow.MutableStateFlow
+&nbsp;import kotlinx.coroutines.flow.StateFlow
+&nbsp;import kotlinx.coroutines.flow.asStateFlow
+&nbsp;import kotlinx.coroutines.flow.update
+&nbsp;import kotlinx.coroutines.launch
+&nbsp;import java.time.LocalDateTime
+&nbsp;import java.util.UUID
+&nbsp;
+&nbsp;/**
+&nbsp; * Evidencia de la visita: la foto y el GPS quedan LIGADOS porque la ubicación
+&nbsp; * se obtiene en el instante en que la cámara devuelve la foto. Si se repite la foto,
+&nbsp; * se repite el GPS.
+&nbsp; */
+&nbsp;data class CapturaEvidencia(
+&nbsp;    val fotoUri: String,
+&nbsp;    val latitud: Double,
+&nbsp;    val longitud: Double,
+&nbsp;    val precisionMetros: Double?,
+&nbsp;    val esSimulada: Boolean,
+&nbsp;    val fechaCaptura: String,
+&nbsp;    val distanciaMetros: Double,
+&nbsp;    val dentroDelRadio: Boolean,
+&nbsp;    val motivo: String
+&nbsp;)
+&nbsp;
+&nbsp;data class VisitaUiState(
+&nbsp;    val cargando: Boolean = true,
+&nbsp;    val solicitud: Solicitud? = null,
+&nbsp;    val estadoEquipo: EstadoEquipo? = null,
+&nbsp;    val observaciones: String = &quot;&quot;,
+&nbsp;    val captura: CapturaEvidencia? = null,
+&nbsp;    val capturandoGps: Boolean = false,
+&nbsp;    val clima: Clima? = null,
+&nbsp;    val climaNoDisponible: Boolean = false,
+&nbsp;    val estadoEquipoError: String? = null,
+&nbsp;    val observacionesError: String? = null,
+&nbsp;    val evidenciaError: String? = null,
+&nbsp;    val enviando: Boolean = false,
+&nbsp;    val resultado: ResultadoRegistro? = null,
+&nbsp;    val error: String? = null
+&nbsp;) {
+&nbsp;    val puedeEnviar get() = captura?.dentroDelRadio == true &amp;&amp; !enviando &amp;&amp; !capturandoGps
+&nbsp;}
+&nbsp;
+&nbsp;class VisitaViewModel(
+<b class="fc">&nbsp;    private val solicitudes: SolicitudRepository,</b>
+<b class="fc">&nbsp;    private val visitas: VisitaRepository,</b>
+<b class="fc">&nbsp;    private val clima: ClimaRepository,</b>
+<b class="fc">&nbsp;    private val gps: LocationProvider,</b>
+<b class="fc">&nbsp;    private val encoder: ImageEncoder,</b>
+<b class="fc">&nbsp;    private val operarioId: Long,</b>
+<b class="fc">&nbsp;    private val solicitudId: Long,</b>
+<b class="fc">&nbsp;    private val reloj: () -&gt; LocalDateTime = { LocalDateTime.now() },</b>
+<b class="fc">&nbsp;    private val generarId: () -&gt; String = { UUID.randomUUID().toString() }</b>
+<b class="fc">&nbsp;) : ViewModel() {</b>
+&nbsp;
+<b class="fc">&nbsp;    private val _estado = MutableStateFlow(VisitaUiState())</b>
+<b class="fc">&nbsp;    val estado: StateFlow&lt;VisitaUiState&gt; = _estado.asStateFlow()</b>
+&nbsp;
+<b class="fc">&nbsp;    init {</b>
+<b class="fc">&nbsp;        viewModelScope.launch {</b>
+<b class="fc">&nbsp;            solicitudes.obtener(solicitudId)</b>
+<b class="fc">&nbsp;                .onSuccess { s -&gt; _estado.update { it.copy(cargando = false, solicitud = s) } }</b>
+<b class="fc">&nbsp;                .onFailure { e -&gt; _estado.update { it.copy(cargando = false, error = e.message) } }</b>
+&nbsp;        }
+<b class="fc">&nbsp;    }</b>
+&nbsp;
+<b class="fc">&nbsp;    fun onEstadoEquipo(e: EstadoEquipo) = _estado.update {</b>
+<b class="fc">&nbsp;        it.copy(estadoEquipo = e, estadoEquipoError = null, observacionesError = null)</b>
+&nbsp;    }
+&nbsp;
+<b class="fc">&nbsp;    fun onObservaciones(v: String) = _estado.update { it.copy(observaciones = v, observacionesError = null) }</b>
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Se llama apenas la cámara devuelve la foto. En ese mismo momento se pide
+&nbsp;     * el GPS y se verifica contra la ubicación del punto de venta.
+&nbsp;     */
+&nbsp;    fun onFotoTomada(uri: String) {
+<b class="pc">&nbsp;        val punto = _estado.value.solicitud?.puntoVenta ?: return</b>
+<b class="fc">&nbsp;        val fecha = reloj()</b>
+<b class="fc">&nbsp;        _estado.update { it.copy(capturandoGps = true, captura = null, evidenciaError = null, error = null) }</b>
+<b class="fc">&nbsp;        viewModelScope.launch {</b>
+<b class="fc">&nbsp;            val ub = gps.obtenerUbicacionActual()</b>
+<b class="fc">&nbsp;            if (ub == null) {</b>
+<b class="fc">&nbsp;                _estado.update {</b>
+<b class="fc">&nbsp;                    it.copy(</b>
+<b class="fc">&nbsp;                        capturandoGps = false,</b>
+<b class="fc">&nbsp;                        evidenciaError = &quot;No se pudo obtener el GPS. Active la ubicación y vuelva a tomar la foto&quot;</b>
+<b class="fc">&nbsp;                    )</b>
+&nbsp;                }
+&nbsp;                return@launch
+&nbsp;            }
+<b class="fc">&nbsp;            val distancia = GeoUtils.distanciaMetros(ub.latitud, ub.longitud, punto.latitud, punto.longitud)</b>
+<b class="fc">&nbsp;            val (dentro, motivo) = when {</b>
+<b class="fc">&nbsp;                ub.esSimulada -&gt; false to &quot;Se detectó GPS simulado. La visita no puede registrarse&quot;</b>
+<b class="fc">&nbsp;                (ub.precisionMetros ?: 0.0) &gt; GeoUtils.PRECISION_MAXIMA_M -&gt;</b>
+<b class="fc">&nbsp;                    false to &quot;Señal GPS débil (±${ub.precisionMetros!!.toInt()} m). Salga al exterior y repita la foto&quot;</b>
+<b class="fc">&nbsp;                distancia &gt; punto.radioMetros -&gt;</b>
+<b class="fc">&nbsp;                    false to &quot;Está a ${GeoUtils.formatearDistancia(distancia)} del punto de venta (máx. ${punto.radioMetros} m)&quot;</b>
+<b class="fc">&nbsp;                else -&gt; true to &quot;Ubicación verificada: a ${GeoUtils.formatearDistancia(distancia)} del punto de venta&quot;</b>
+&nbsp;            }
+<b class="fc">&nbsp;            val captura = CapturaEvidencia(</b>
+<b class="fc">&nbsp;                fotoUri = uri,</b>
+<b class="fc">&nbsp;                latitud = ub.latitud,</b>
+<b class="fc">&nbsp;                longitud = ub.longitud,</b>
+<b class="fc">&nbsp;                precisionMetros = ub.precisionMetros,</b>
+<b class="fc">&nbsp;                esSimulada = ub.esSimulada,</b>
+<b class="fc">&nbsp;                fechaCaptura = Formatos.fechaIso(fecha),</b>
+<b class="fc">&nbsp;                distanciaMetros = distancia,</b>
+<b class="fc">&nbsp;                dentroDelRadio = dentro,</b>
+<b class="fc">&nbsp;                motivo = motivo</b>
+&nbsp;            )
+<b class="fc">&nbsp;            _estado.update { it.copy(capturandoGps = false, captura = captura) }</b>
+<b class="fc">&nbsp;            cargarClima(ub.latitud, ub.longitud)</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    /** API externa: temperatura ambiente del lugar. Si falla no bloquea la visita. */
+&nbsp;    private suspend fun cargarClima(lat: Double, lon: Double) {
+<b class="fc">&nbsp;        clima.climaActual(lat, lon)</b>
+<b class="fc">&nbsp;            .onSuccess { c -&gt; _estado.update { it.copy(clima = c, climaNoDisponible = false) } }</b>
+<b class="fc">&nbsp;            .onFailure { _estado.update { it.copy(clima = null, climaNoDisponible = true) } }</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    fun validarFormulario(): Boolean {
+<b class="fc">&nbsp;        val s = _estado.value</b>
+<b class="fc">&nbsp;        val estadoError = if (s.estadoEquipo == null) &quot;Seleccione el estado en que queda el equipo&quot; else null</b>
+<b class="fc">&nbsp;        val obsError = Validaciones.observacionVisita(s.observaciones, s.estadoEquipo == EstadoEquipo.CON_FALLA)</b>
+<b class="fc">&nbsp;        val evidenciaError = when {</b>
+<b class="fc">&nbsp;            s.captura == null -&gt; &quot;Debe tomar la foto de evidencia en el punto de venta&quot;</b>
+<b class="fc">&nbsp;            !s.captura.dentroDelRadio -&gt; s.captura.motivo</b>
+<b class="fc">&nbsp;            else -&gt; null</b>
+&nbsp;        }
+<b class="fc">&nbsp;        _estado.update {</b>
+<b class="fc">&nbsp;            it.copy(estadoEquipoError = estadoError, observacionesError = obsError, evidenciaError = evidenciaError)</b>
+&nbsp;        }
+<b class="fc">&nbsp;        return estadoError == null &amp;&amp; obsError == null &amp;&amp; evidenciaError == null</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    fun enviar() {
+<b class="pc">&nbsp;        if (_estado.value.enviando || !validarFormulario()) return</b>
+<b class="fc">&nbsp;        val s = _estado.value</b>
+<b class="pc">&nbsp;        val solicitud = s.solicitud ?: return</b>
+<b class="pc">&nbsp;        val captura = s.captura ?: return</b>
+<b class="fc">&nbsp;        _estado.update { it.copy(enviando = true, error = null) }</b>
+<b class="fc">&nbsp;        viewModelScope.launch {</b>
+<b class="fc">&nbsp;            val foto = encoder.codificar(captura.fotoUri)</b>
+<b class="fc">&nbsp;            if (foto == null) {</b>
+<b class="fc">&nbsp;                _estado.update { it.copy(enviando = false, error = &quot;No se pudo procesar la foto. Tómela nuevamente&quot;) }</b>
+&nbsp;                return@launch
+&nbsp;            }
+<b class="fc">&nbsp;            val req = VisitaRequest(</b>
+<b class="fc">&nbsp;                idLocal = generarId(),</b>
+<b class="fc">&nbsp;                solicitudId = solicitud.id,</b>
+<b class="fc">&nbsp;                operarioId = operarioId,</b>
+<b class="fc">&nbsp;                estadoEquipo = s.estadoEquipo!!,</b>
+<b class="pc">&nbsp;                observaciones = s.observaciones.trim().ifBlank { null },</b>
+<b class="fc">&nbsp;                fotoBase64 = foto,</b>
+<b class="fc">&nbsp;                latitud = captura.latitud,</b>
+<b class="fc">&nbsp;                longitud = captura.longitud,</b>
+<b class="fc">&nbsp;                precisionMetros = captura.precisionMetros,</b>
+<b class="fc">&nbsp;                ubicacionSimulada = captura.esSimulada,</b>
+<b class="fc">&nbsp;                fechaCaptura = captura.fechaCaptura,</b>
+<b class="fc">&nbsp;                temperaturaAmbiente = s.clima?.temperatura</b>
+&nbsp;            )
+<b class="fc">&nbsp;            visitas.registrar(req, solicitud.puntoVenta.nombre)</b>
+<b class="fc">&nbsp;                .onSuccess { r -&gt; _estado.update { it.copy(enviando = false, resultado = r) } }</b>
+<b class="fc">&nbsp;                .onFailure { e -&gt; _estado.update { it.copy(enviando = false, error = e.message) } }</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2026-11-26 01:06</div>
+</div>
+</body>
+</html>

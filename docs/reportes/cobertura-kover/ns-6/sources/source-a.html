@@ -1,0 +1,94 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>app Coverage Report > LocationProvider</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope: app<span class="separator">|</span>    <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">cl.duoc.tacticaldev.util</a>
+</div>
+
+<h1>Coverage Summary for Class: LocationProvider (cl.duoc.tacticaldev.util)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+</tr>
+<tr>
+  <td class="name">LocationProvider</td>
+    <td class="coverageStat"/>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package cl.duoc.tacticaldev.util
+&nbsp;
+&nbsp;/** Ubicación obtenida en el mismo instante en que se toma la foto. */
+&nbsp;data class UbicacionCapturada(
+&nbsp;    val latitud: Double,
+&nbsp;    val longitud: Double,
+&nbsp;    val precisionMetros: Double?,
+&nbsp;    /** true si Android detecta una app de GPS falso. */
+&nbsp;    val esSimulada: Boolean
+&nbsp;)
+&nbsp;
+&nbsp;/** Abstracción del GPS para poder simularlo en las pruebas unitarias. */
+&nbsp;interface LocationProvider {
+&nbsp;    /** Devuelve null si no hay permiso o el GPS está apagado. */
+&nbsp;    suspend fun obtenerUbicacionActual(): UbicacionCapturada?
+&nbsp;}
+&nbsp;
+&nbsp;/** Abstracción de la conversión de la foto a Base64 (comprimida). */
+&nbsp;interface ImageEncoder {
+&nbsp;    suspend fun codificar(uri: String): String?
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2026-11-26 01:06</div>
+</div>
+</body>
+</html>
