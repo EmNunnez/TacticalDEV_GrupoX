@@ -1,6 +1,6 @@
 # TacticalDEV Visitas — Trazabilidad y verificación de visitas en terreno
 
-**Asignatura:** DSY1105 Desarrollo de Aplicaciones Móviles · Evaluación Parcial 4
+**Asignatura:** DSY1105 Desarrollo de Aplicaciones Móviles · Evaluación Parcial 3
 **Caso:** TacticalDEV, CITT Plaza Oeste
 
 ## 1. Nombre del proyecto
@@ -122,8 +122,8 @@ Signer #1 certificate DN: CN=Emilio Nuñez, OU=DSY1105 Grupo X, O=Duoc UC, L=San
 ```
 
 ## Planificación
-- Tablero Trello: *(enlace)*
-- Repositorio GitHub: *(enlace)*
+- Tablero GitHub proyects(Trello) : https://github.com/users/EmNunnez/projects/1/views/1
+- Repositorio GitHub: https://github.com/EmNunnez/TacticalDEV_GrupoX
 
 ## Estructura del repositorio
 ```
